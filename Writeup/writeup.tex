@@ -30,7 +30,7 @@ that the price and quantity are equilibrium prices and quantity rather
 than various points along the same demand curve.
 
 Assume that there exists some outside output, and if we take the log
-of the shares and subtract the outside output we arrive at:
+of the shares and subtract the outside option we arrive at:
 
 \begin{equation*}
   \log s_{jt} - \log s_{0t} = V(x_{jt}, p_{jt})
@@ -71,14 +71,13 @@ observed, we cannot identify these parameters, however since $N^{*}$
 is fixed across goods, we could identify differences in the drop
 rates: $\xi_j - \xi_k$.
 
-We can formulate this problem as a GMM estimation procedure using the
-notion of Mathematical Programming under Equality Constraints:
+We can formulate this problem as a GMM estimation procedure.
 
 \begin{align*}
-  \min \quad & e_{jt} W e_{jt}\\
+  \min \quad & (e_{jt} \quad m_{jt} )' W (e_{jt} \quad m_{jt})\\
   \text{subject to: } e_{jt} &= V(x_{jt}, p_{jt}) - \log s_{jt} + \log
   s_{0t}\\
-  \log s_{jt} &= \log \delta_j + \log N_t \text{ when } p_{jt} > .03
+  m_{jt} &= \log \delta_j + \log N_t - \log s_{jt} \text{ when } p_{jt} > .03
 \end{align*}
 
 
