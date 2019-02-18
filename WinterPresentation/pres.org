@@ -1,0 +1,177 @@
+#+STARTUP: beamer 
+#+LATEX_CLASS: beamer
+#+BEAMER_THEME: Montpellier
+#+LaTeX_CLASS_OPTIONS: [bigger]
+#+OPTIONS: H:2 toc:nil
+#+toc: nil
+#+TITLE: The benefits of Randomization Mechanisms in Counter-Strike: Global Offensive
+#+AUTHOR: Timothy Schwieg
+#+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
+#+LATEX_HEADER: \newcommand{\exV}[1]{\mathbb{E} \left [ #1 \right ]}
+
+* Thesis
+** Topic
+- Many video games have chosen to sell cosmetic alterations to their
+  games using randomization mechanisms called ``loot boxes''
+- Economic Literature tells us that there is no benefit to
+  randomization for risk-neutral consumers, so the benefit must come
+  from risk-loving consumers.
+- How much more revenue-generating is this compared to traditional
+  selling mechanisms?
+
+* Counter-Strike
+** What is Counter Strike?
+- Popular First-Person Shooter video game first created in 1999,
+  current version has existed since 2012
+- Weapon Skins are items that change how your weapon looks within the game
+- Skins can be opened from boxes for \(\$2.50\) or bought and sold at
+  a secondary market
+- The contents are each box are public, as are the probabilities of
+  obtaining each of the contents.
+- The boxes or their contents are able to be sold at a
+  secondary market where Valve then takes 15% as a tax.
+
+** Why do we care?
+- We are interested in discovering what drives this market to feature
+  randomization mechanisms.
+- Are consumers inherently more risk-loving when they play video
+  games?
+- Is this driven by consumers over-weighting tiny probabilities as
+  cumulative prospect theory suggests?
+- Are consumers weighing benefits and losses differently?
+- What is the magnitude of these gains from randomization?
+
+** What do the weapon skins look like?
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=8cm]{hyperBeast.jpg}
+\end{figure}
+
+
+* Data
+** The Data
+- Contains complete market history for all items sold in the Steam
+  Community Market for /Counter-Strike: Global Offensive/
+- Market history is specific to the hour for the last 30 days,
+  specific to the day for the remaining time the item has existed.
+- Contains all active buy and sell orders for each of these items as
+  of June 7^th 2018.
+- Note that this not the only way to obtain the item, as it can also
+  be obtained by opening the box. 
+
+
+
+* Model
+** Roadmap
+- Want to estimate the demand of the consumers for each of the
+  weapons contained in the game. 
+- Compute the distribution of the risk-neutral price that consumers
+  would be willing to pay for a loot-box.
+- Compute the risk-preference of consumers by using the demand for the
+  loot boxes and the demand for the contents.
+- Calculate the benefit of randomization by the difference between the
+  valuation distribution for the boxes, and the risk-neutral distribution.
+
+** Discrete Choice
+- There are many weapons available in the game, but discrete choice
+  requires that we only ever buy a single item.
+- Assume that there are distinct markets for each weapon ``role'' that
+  is decided by domain knowledge.
+- For example, a person would only consider buying a single AK47 skin,
+  as he only ever have one equipped at a time.
+- This assumes that no substitution occurs between weapon roles
+  (AK47 never substituted for M4)
+
+** Agents
+- Want to use the Random Coefficients Logit Demand Model. (BLP 1995)
+
+#+BEGIN_EXPORT latex
+\begin{equation*}
+  u_{ij} = \alpha_i p_j + \bm{x}_j' \bm{\beta}_i + \xi_j + \epsilon_{ij}
+\end{equation*}
+#+END_EXPORT
+- $\alpha_i, \beta_i$ individual specific parameters, $x_j$ is the observed
+  characteristics of good $j$, $\xi_j$ is unobserved characteristics (but
+  the consumers and producers observe them). 
+- $\epsilon_{ij}$ is distributed type 1 extreme value distribution with mean $0$.
+- Logit demand with heterogeneity between consumers
+
+** BLP Continued
+- Consumer i's demand for good $j$ is given by:
+
+\begin{equation*}
+  \Pr( i \rightarrow j ) = \frac{\exp( \alpha_i p_j + x_j' \beta_i + \xi_j)}{\sum_{k \in
+      \mathcal{F}_t} \exp( \alpha_i p_k + x_k' \beta_i + \xi_k)}
+\end{equation*}
+
+- Equilibrium Market share $\pi_j$ is given by:
+\begin{equation*}
+  \hat{s}_j \approx \pi_j = \exV{ \Pr( i \rightarrow j )}
+\end{equation*}
+
+# ** BLP Estimation
+# - Setting observed market shares equal to equilibrium market shares:
+# \begin{equation*}
+#   \hat{s}_j \approx \exV{ \Pr( i \rightarrow j )} = \int \Pr( i \rightarrow j) d\theta \approx \frac{1}{N_s}
+#   \sum_{i=1}^{N_s} \Pr( i \rightarrow j)
+# \end{equation*}
+
+# - This can be inverted to solve for $\xi_j$ which are the unobserved
+#   characteristics. To control for their endogeneity, we need instruments.
+
+** Instruments
+- Need instruments for both price and market share
+- Price Instruments: The price of other contents in the same loot
+  box. By our separate market assumption, this is exogenous. 
+- Instrument relevance: Supply shocks (changes to the amount of boxes
+  being opened) must affect the other contents as well as this one.
+- Market Share instruments: BLP Instruments
+- Use the sum of the characteristics of the other products in the
+  market.
+
+# ** MPEC Estimation
+# - Estimate model using Generalized Method of Moments with the
+#   condition: $\mathbb{E}[ \xi_j z_j ] = 0$.
+
+# \begin{align*}
+#   &\min_{\bm{\xi}_{j,t}, \xi_{j,t}} \bm{\xi}_{j,t}' \Omega \bm{\xi}_{j,t}\\
+#     \text{subject to: } &s_{j,t} = \frac{1}{N_s} \sum_{i=1}^{N_s}
+#                           \frac{\exp(\alpha_i p_j + x_j'\beta_i + \xi_j)}{\sum_{k\in
+#                           \mathcal{F}_t} \exp( \alpha_i p_k + x_k'\beta_i +
+#                           \xi_k)}\\
+#   &\bm{\xi}_{j,t} = \xi_{j,t} \bm{z}_{j,t}  
+# \end{align*}
+
+** Risk Preferences
+- Assume that consumers are homogeneous about risk-preferences and the
+  market for the loot boxes and their contents are in equilibrium.
+- This assumption implies that there are no differences between the
+  consumers that purchase the loot boxes and those that do not.
+- This allows our estimates of demand from the secondary market to be
+  applied to the loot boxes.
+
+** Risk Neutral Pricing
+- From the distribution of valuations for the weapon skins, the
+  risk-neutral valuations of the loot box are a convex combination. 
+- By assuming normality on the valuations, this is computationally
+  tractable.
+- This risk-neutral pricing is the value that could be made by selling
+  these items using traditional price-discovery mechanisms.
+
+** Risk Estimation
+- Want to estimate the risk primitives (Cumulative Prospect Theory)
+- However market price is censored data of valuations. 
+- Existing buy orders however are valuations. Reporting your actual
+  valuation is a dominant strategy when you pay the seller's ask.
+- Can estimate the risk-primitives using some functional form and
+  Censored Maximum Likelihood Estimation
+
+** Results
+- Once we have computed the risk primitives, we can compute the
+  benefit of randomization
+- For some good $j$ with consumer $i$'s valuation $V_{ij}$, Let $F(V_i)$
+  be the risk-transformed valuation.
+- Benefit to Valve for this randomization is given by:
+\begin{equation*}
+\Pi = \int \sum \left[ F(V_{ij}) - V_{ij} \right] d\theta
+\end{equation*}
