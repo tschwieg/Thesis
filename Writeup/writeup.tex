@@ -1,0 +1,86 @@
+\documentclass[12pt]{paper}
+
+\usepackage{Schwieg}
+
+\begin{document}
+Let us believe that individuals have a valuation for loot boxes as
+suggested by Cumulative Prospect Theory. There is also an additive
+error shock that is distributed type-1 extreme value.
+
+Therefore we can say that the utility of a consumer $i$ for loot box
+$j$ is given by:
+\begin{equation*}
+  u_{ijt} = V( x_{jt}, p_{jt} ) + \epsilon_{ij} \quad \epsilon_{ij} \sim Gumbel
+\end{equation*}
+
+The demand for this good then is given by the probability that it has
+the maximum utility. This can be computed using the properties of the
+Type-1 extreme value distribution. The maximum follows a logistic
+distribution, and the probability is given by:
+
+\begin{equation*}
+  \Pr( i \rightarrow j ) = \frac{\exp( V(x_{jt},p_{jt})}{ \sum_{k \in \mathcal{F}}
+    \exp(V(x_{jt},p_{jt}))}
+\end{equation*}
+
+In this sense, demand is non-random, and the Econometrician observes
+the price of the box, the covariates of the box, as well as the
+equilibrium quantity $q_{jt}$. All facets here observed, save the fact
+that the price and quantity are equilibrium prices and quantity rather
+than various points along the same demand curve.
+
+Assume that there exists some outside output, and if we take the log
+of the shares and subtract the outside output we arrive at:
+
+\begin{equation*}
+  \log s_{jt} - \log s_{0t} = V(x_{jt}, p_{jt})
+\end{equation*}
+
+Let the observed equilibrium shares be given by the true demand plus
+some unobserved zero mean error $U_D$ that is exogenous to the valuations
+$V(x_{jt}, p_{jt})$. We therefore have $\exV{V(x_{jt},p_{jt})U_D} = 0$
+
+The supply of these lotteries is players who are playing the game and
+randomly receive the item as a reward for playing. Let us believe that
+there is a group of players that simply do not open these loot boxes
+upon receiving them. These players then immediately sell their
+lotteries on the steam community market. This essentially means that
+there is a perfectly inelastic supply of these boxes each
+day. However, to complicate matters there is a binding minimum
+exchange price of $\$0.03$. At this price, we treat supply as
+perfectly elastic, indicating that the supply curve is a corner.
+
+The supply curve can then be given as $q_{jt}^S = \xi_{j} N_t$ when
+$p_j > .03$ and $p = .03$ otherwise. There is no randomness in the
+quantity supplied in the case where the price floor is binding. So
+endogeneity in prices only occurs when the price is non-binding. Price
+is also not endogenous for the active buy orders. It is only in the
+case when the price is determined by the intersection of supply and
+demand that the price is endogenous. We divide the supply by the
+players that are searching for weapons denoted $N^{*}$. This is the
+total number of players that demand weapons, and $\frac{q_{jt}^S }{N^{*}}
+= s_{jt}$. Therefore we can write supply as $s_{jt} = \xi_j^{\prime} N_t$
+where both terms have been dividing by $N^{*}$. Taking logs gives us:
+
+\begin{equation*}
+  \log s_{jt} = \log \xi_j + \log N_t - \log N^{*}
+\end{equation*}
+
+We can note immediately that since neither $\xi_j$ or $N^{*}$ are
+observed, we cannot identify these parameters, however since $N^{*}$
+is fixed across goods, we could identify differences in the drop
+rates: $\xi_j - \xi_k$.
+
+We can formulate this problem as a GMM estimation procedure using the
+notion of Mathematical Programming under Equality Constraints:
+
+\begin{align*}
+  \min \quad & e_{jt} W e_{jt}\\
+  \text{subject to: } e_{jt} &= V(x_{jt}, p_{jt}) - \log s_{jt} + \log
+  s_{0t}\\
+  \log s_{jt} &= \log \delta_j + \log N_t \text{ when } p_{jt} > .03
+\end{align*}
+
+
+
+\end{document}
