@@ -108,10 +108,27 @@ function BuildCaseMatrix( Case::String, PlayerBase::DataFrame)
             index = size(weaponData[j],1)
             
             colIndex = 7+(j-1)*2
+            #Last active price
             dataMat[i,colIndex] = weaponData[j][index,2]
-            dataMat[i,colIndex+1] = weaponData[j][index,3]
+            #Probability of obtaining it
+            dataMat[i,colIndex+1] = contents[j,4]
+            #dataMat[i,colIndex+1] = weaponData[j][index,3]
             #println(j)
         end
+
+        indicies = 7.+(1:size(contents,1)-1)*2
+        newVec = Vector{Float64}(undef, length(indices)*2)
+        prices = dataMat[i,indices]
+        #This is the index order that 
+        p = sortperm( prices, rev=true)
+        prev = 0.0
+        for i in 1:length(p)
+            newVec[2*(i-1)+1] = prices[p[i]]
+            #Probabilities are cumsums
+            newVec[2*i] = prices[p[i]+1] + prev
+            prev = newVec[2*i]
+        end
+        dataMat[i,7:end] = newVec
     end
     return dataMat
 end

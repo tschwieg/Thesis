@@ -8,10 +8,16 @@ suggested by Cumulative Prospect Theory. There is also an additive
 error shock that is distributed type-1 extreme value.
 
 Therefore we can say that the utility of a consumer $i$ for loot box
-$j$ is given by:
+$j$ in time $t$ is given by:
 \begin{equation*}
-  u_{ijt} = V( x_{jt}, p_{jt} ) + \epsilon_{ij} \quad \epsilon_{ij} \sim Gumbel
+  u_{ijt} = V( x_{jt}, p_{jt} ) + \xi_{jt} + \epsilon_{ij} \quad \epsilon_{ij} \sim Gumbel
 \end{equation*}
+
+Where $V$ is the valuation for the loot box, $p_{jt}$ is the price,
+$x_{jt}$ are the covariates, $\xi_{jt}$ is some demand shock common to
+all consumers (this can be rationalized as unobserved benefits), and
+$\epsilon_{ij}$ is a type-1 extreme value shock unique to the consumer and
+good.
 
 The demand for this good then is given by the probability that it has
 the maximum utility. This can be computed using the properties of the
@@ -19,8 +25,8 @@ Type-1 extreme value distribution. The maximum follows a logistic
 distribution, and the probability is given by:
 
 \begin{equation*}
-  \Pr( i \rightarrow j ) = \frac{\exp( V(x_{jt},p_{jt})}{ \sum_{k \in \mathcal{F}}
-    \exp(V(x_{jt},p_{jt}))}
+  \Pr( i \rightarrow j ) = \frac{\exp( V(x_{jt},p_{jt}) + \xi_{jt}}{ \sum_{k \in \mathcal{F}}
+    \exp(V(x_{jt},p_{jt}) + \xi_{kt})}
 \end{equation*}
 
 In this sense, demand is non-random, and the Econometrician observes
@@ -29,56 +35,74 @@ equilibrium quantity $q_{jt}$. All facets here observed, save the fact
 that the price and quantity are equilibrium prices and quantity rather
 than various points along the same demand curve.
 
-Assume that there exists some outside output, and if we take the log
-of the shares and subtract the outside option we arrive at:
+Following the structure of Berry (1994) we consider an outside option
+that has some market share. The outside option is simply not partaking
+in any of the lotteries, and thus the valuation of this is $0$.
+However there is still some unobserved demand $\xi_{0t}$. Inversion to
+solve for this parameter is simple, as
+$\Pr( i \rightarrow 0) = \frac{\xi_0}{ \sum_{k \in \mathcal{F}} \exp(V(x_{jt},p_{jt}) +
+  \xi_k)}$.  Dividing each demand equation by the outside option and
+taking logs yields us:
 
 \begin{equation*}
-  \log s_{jt} - \log s_{0t} = V(x_{jt}, p_{jt})
+  \log s_{jt} - \log s_{0t} = V(x_{jt}, p_{jt}) + \xi_{jt}
 \end{equation*}
 
-Let the observed equilibrium shares be given by the true demand plus
-some unobserved zero mean error $U_D$ that is exogenous to the valuations
-$V(x_{jt}, p_{jt})$. We therefore have $\exV{V(x_{jt},p_{jt})U_D} = 0$
+Since $\xi_{jt}$ is unobserved by the econometrician, it takes the form
+of the unobserved error in the demand estimation procedure. However,
+it is sometimes endogenous to price as price is formed by the
+intersection of both supply and demand shocks. We need valid
+instruments for the estimation of this demand. 
 
-The supply of these lotteries is players who are playing the game and
-randomly receive the item as a reward for playing. Let us believe that
-there is a group of players that simply do not open these loot boxes
-upon receiving them. These players then immediately sell their
-lotteries on the steam community market. This essentially means that
-there is a perfectly inelastic supply of these boxes each
-day. However, to complicate matters there is a binding minimum
-exchange price of $\$0.03$. At this price, we treat supply as
-perfectly elastic, indicating that the supply curve is a corner.
+Supply can be thought of as upward sloping with an active price floor
+at a price of $.03$ which is often binding. However, the supply
+changes with the active player base in the day of sale, and the day
+before the sale. However in the section where the price floor is
+binding, supply is constant and there is no simultaneity
+concerns. Price is therefore exogenous in this case, as it is
+determined by the price floor. 
 
-The supply curve can then be given as $q_{jt}^S = \xi_{j} N_t$ when
-$p_j > .03$ and $p = .03$ otherwise. There is no randomness in the
-quantity supplied in the case where the price floor is binding. So
-endogeneity in prices only occurs when the price is non-binding. Price
-is also not endogenous for the active buy orders. It is only in the
-case when the price is determined by the intersection of supply and
-demand that the price is endogenous. We divide the supply by the
-players that are searching for weapons denoted $N^{*}$. This is the
-total number of players that demand weapons, and $\frac{q_{jt}^S }{N^{*}}
-= s_{jt}$. Therefore we can write supply as $s_{jt} = \xi_j^{\prime} N_t$
-where both terms have been dividing by $N^{*}$. Taking logs gives us:
-
+Demand can then be estimated off of the condition that:
 \begin{equation*}
-  \log s_{jt} = \log \xi_j + \log N_t - \log N^{*}
+  \exV{Z_t (\xi_{tj})} = 0 \quad \exV{ p_{jt} \xi_{jt} } = 0 \text{When } p = \$.03
 \end{equation*}
 
-We can note immediately that since neither $\xi_j$ or $N^{*}$ are
-observed, we cannot identify these parameters, however since $N^{*}$
-is fixed across goods, we could identify differences in the drop
-rates: $\xi_j - \xi_k$.
+We believe that demand is a function of the long-run average number
+of players, or the amount of ``active players'' over the period of the
+month. This Number is different from the daily players that play each
+day, as relatively few people are able to play each day for many
+reasons. However, since we have that these loot boxes are given
+randomly to each player who plays in a day, We may instrument the
+demand by using the difference in the daily player-base from the
+long-run average player-base as a cost shifter that is exogenous to
+demand. We use today's deviation as well as yesterdays deviation as
+instruments. 
 
-We can formulate this problem as a GMM estimation procedure.
+Also present in the data is active buy orders, these are orders place
+that there is not yet supply to fulfill. However it is a dominant
+strategy for place your valuation as the bid. Therefore there is no
+concerns about shading, and we may treat these orders as true
+valuations. In the case of these estimates, we should find that demand
+shock is equal to zero, and uncorrelated with the valuation, or that
+$\exV{p_{jt}\xi_{jt}} = 0$
 
-\begin{align*}
-  \min \quad & (e_{jt} \quad m_{jt} )' W (e_{jt} \quad m_{jt})\\
-  \text{subject to: } e_{jt} &= V(x_{jt}, p_{jt}) - \log s_{jt} + \log
-  s_{0t}\\
-  m_{jt} &= \log \delta_j + \log N_t - \log s_{jt} \text{ when } p_{jt} > .03
-\end{align*}
+This gives us price moments for each of the possible cases of the
+data. The rest of the covariates are the probabilities of obtaining
+each of the items, which are obviously exogenous and the last known
+prices of the contents of the loot boxes. We shall takes these prices
+as exogenous as they were determined by the supply and demand of the
+item in previous time periods.
+
+We may combine all of these into a vector $x_{jt}$ along with a
+constant term and our condition becomes one of
+$\exV{x_{jt}\xi_{jt}} = 0$. This provides us with $2k + 2$ moments per
+data point, when there are $k$ contents, and there are 3 parameters of
+interest to estimate.
+
+We now examine the structure of the Valuation function $V( x_j,
+p_j)$.
+
+
 
 
 
