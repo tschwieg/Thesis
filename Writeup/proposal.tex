@@ -1,0 +1,648 @@
+\documentclass[12pt]{paper}
+
+
+
+\usepackage[margin=1in]{geometry}
+\usepackage{tikz}
+\usepackage{natbib}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{bbm}
+\usepackage{graphicx}
+
+\DeclareMathOperator{\diam}{diam}
+\DeclareMathOperator{\interior}{int}
+\DeclareMathOperator{\close}{cl}
+
+\newcommand{\met}[1]{d \left ( #1 \right )}
+\newcommand{\brak}[1]{ \left [ #1 \right ] }
+\newcommand{\cbrak}[1]{ \left \{ #1 \right \}}
+\renewcommand{\vec}[1]{ \bm{ #1 }}
+\newcommand{\abs}[1]{\left \lvert #1 \right \rvert}
+\newcommand{\seq}[1]{{\left \{ #1 \right \}}}
+\newcommand{\conj}[1]{ \overline{ #1 } }
+%\newcommand{\close}[1]{ \bar{ #1 } }
+\newcommand{\set}[1]{\left \{ #1 \right \}}
+\newcommand{\Lim}{\lim\limits}
+\newcommand{\compose}{\circ}
+\newcommand{\inv}[1]{{#1}^{-1}}
+\newcommand{\compl}[1]{{#1}^{c}}
+
+
+
+\newcommand{\setR}{ \mathbb{R} }
+\newcommand{\setQ}{ \mathbb{Q} }
+\newcommand{\setZ}{ \mathbb{Z} }
+\newcommand{\setN}{ \mathbb{N} }
+
+\newcommand{\plim}{ \overset{p}{\to} }
+\newcommand{\mean}[2][N]{ \overline{ #2 }_{#1}}
+\newcommand{\exV}[1]{\mathbb{E} \left [ #1 \right ]}
+\newcommand{\Vari}[1]{\mathbb{V} \left ( #1 \right )}
+
+\newcommand{\est}[2][n]{ \widehat{ #2 }_{#1}}
+\newcommand{\altest}[2][n]{ \tilde{ #2 }_{#1}}
+
+\newcommand{\indicate}[1]{ \mathbbm{1}_{\{#1\}}}
+\newcommand{\convDist}{ \overset{d}{\to}}
+\newcommand{\unif}{\emph{U}}
+\newcommand{\normal}{\mathcal{N}}
+\newcommand{\eye}{\mathbbm{I}}
+
+\newcommand{\bigO}{\mathcal{O}}
+\newcommand{\Lagrange}{\mathcal{L}}
+
+\newcommand{\deriv}[2]{\frac{ \partial #1}{ \partial #2}}
+
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+
+\newtheorem{assume}{Assumption}
+
+\bibliographystyle{chicago}
+
+\title{The benefits of Randomization Mechanisms in Counter-Strike:
+  Global Offensive}
+\author{Timothy Schwieg}
+
+\begin{document}
+
+\maketitle
+
+\section{Research Question}
+
+
+In the world of video games, a market has appeared for in-game
+purchases. These cosmetic items affect the aesthetics of a player, but
+often do not influence the game-play and are sold by the
+designer. Recently the method of the sales has moved away from the
+traditional market approach of individual prices for each item, and
+towards the ``loot box'' approach. These items are sold in randomized
+lotteries, often given away, with a cost of opening.
+
+Traditional economic research on randomization informs us that for the
+risk-neutral customer, there is no benefit to randomization, as the
+consumer is indifferent. So for this mechanism to be so far-reaching
+into the market, there must be a risk-loving nature to the
+consumers. This begs the question of how much money are these
+companies gaining by exploiting the risk-loving nature of the
+consumers.
+
+Counter-Strike global offensive presents an interesting case study for
+these types of markets, as there is a secondary market where
+individuals can buy and sell these loot boxes, as well as their
+contents. This was one of the first games to introduce the concept of
+the randomized ``loot box'' so there is a long market history
+available. As important as the secondary market is the public
+information about the probability of obtaining the contents of the
+boxes, as required by Chinese Law. Because the supply of the boxes is
+strictly controlled, the market for these items is lively, with many
+items trading for hundreds of dollars, and a few entering the thousands.
+
+
+These factors combine to allow for a structural estimation of demand,
+and risk-tolerance. I intend to combine a discrete choice demand
+estimation model with Cumulative Prospect Theory to estimate the
+monetary value of randomization in the market for weapon skins in
+Counter-Strike Global Offensive.
+
+\section{Literature Review}
+
+The literature in demand estimation is primarily focused around the
+seminal paper written by \cite*{BLP}. This paper presents a framework
+for estimation of a heterogenous consumers in a discrete choice logit
+demand framework. This allows for a richer substitution framework, and
+an ability for the substitution affects to escape the independence of
+irrelevant alternatives result of traditional logit demand.
+
+One such example of estimation is the paper by \cite*{Cereal}. It
+estimates the demand in the cereal industry in order to determine the
+market power in the industry, and determine if the high product
+margins were caused by brand recognition, or by collusive behavior
+between the few firms in the industry. This type of counter-factual
+estimation is common within the literature, and is tested in many ways
+from both the supply and the demand side of the estimation.
+
+I intend to take a different path from what is commonly performed with
+these tools, and attempt to use the estimated parameters to compute
+what these consumers would have been willing to pay for an item under
+some different policy regime (no randomness)
+
+Estimation of these models began with the strategy first suggested by
+\cite{BLP} commonly referred to as the Nested Fixed Point Algorithm,
+but has recently been superseded by the Mathematical Programming under
+Equality Constraints suggested by \cite*{MPEC}. This algorithm
+performs extremely well under sparse Hessian and gradients, of which
+my method contains many. This will allow for significantly easier
+estimation of the demand system.
+
+\cite*{LitReview} presents a broad review of where Prospect theory has
+been applied, as well as its problems with its application,
+particularly in the choice of a reference point, which appears to be
+very significant, but there is little guidance on what to choose
+beyond possibly the expected value of the lottery. Applications of the
+model, originally proposed by \cite*{Kahn} exist mostly in finance and
+insurance. I intend to extend this body to look at the behavior of
+non-expert individuals in a market scenario. I believe that this area
+has not had many applications, likely because of the rarity of quality
+data outside of these fields.
+
+The literature on Cumulative Prospect theory, the main structure of
+this model is primarily focused on experimental data. 
+
+
+\section{Data}
+
+The data are market transaction history for all items sold on the
+\emph{Steam Community Market} for Counter-Strike: Global
+Offensive.
+
+Counter-Strike Global Offensive is a first-person shooter game where
+one team (terrorists) attempt to plant a bomb and defend it while the
+counter-terrorists attempt to defuse the bomb. Each team has specific
+guns that they are able to purchase at the start of every round. The
+in-game cost, game balance, and meta-game all contribute to the
+popularity of each weapon. Players may choose to purchase purely
+cosmetic ``skins'' for their weapons which change the appearance of
+their weapon when they buy it. These skins are sold in lotteries
+called weapon crates which are dropped randomly to players
+in-game. The drop rates are unknown, and believed to change
+often. Upon receiving a weapon crate, a player may elect to spend
+\$2.50 to open it, or sell it on the community market.
+
+These crates display which weapon skins they may contain, and the
+probability of obtaining each item within the crate is public
+knowledge. That is, the contents of the crate follow a known
+distribution, and can therefore be estimated under theories of
+risk. The contents of the crate can then be held onto, or sold at
+market.
+
+\subsection{Market}
+
+
+The market that these weapons can be sold at is the \emph{Steam
+  Community Market} which is run by Valve, the same company that makes
+Counter-Strike: Global Offensive. The market is a continuous time
+double-auction. Sellers may place sell orders, and buyers buy orders,
+and the market functions by matching the buyers and sellers, always
+selling at the seller's price. This is known to converge quickly to a
+competitive market, and will be treated as such for this
+project. \cite{Efficiency} There are two complications however, there is a 15\% tax
+placed on the market by Valve, which is taken from the seller's
+earnings. This is complicated by the discrete nature of the selling,
+and the tax always rounds up in favor of Valve. That is, an item
+selling for \$0.03 would return \$.02 to Valve rather than 15\%. This
+will not be a large factor in my model as I am primarily interested in
+calculating demand.
+
+For the past 30 days, there is data on hourly median market price as
+well as quantity sold. For the remaining time that an item has been at
+market, there is data for daily median price and quantity sold. The
+data also contain active buy and sell orders at the time of its
+mining: (June $7^{th}$ 2018). No history for these buy and sell orders
+is available.
+
+\subsection{Characteristics}
+
+Since the model used will be in the characteristic space rather than
+the product space, I am especially interested in characteristics of
+the different weapons in the game. I shall ignore the characteristics
+that will be used to determine the market for the weapon, detailed in
+Assumption 1 in the model section. Unique to each weapon is a float
+value, between $0$ and $1$, which indicates the wear on the
+weapon. Wear does not change with use, and is determined when a weapon
+is un-boxed. This float is distributed uniformly, but based on its
+value, places the weapon into different brackets for sale. We will
+consider all weapons in a particular bracket as homogenous.
+\begin{center}
+\begin{tabular}{|l|l|}\hline
+  Float & Condition\\\hline
+  0.00 - 0.07 & Factory New\\
+  0.07 - 0.15 & Minimal Wear\\
+  0.15 - 0.38 & Field-Tested\\
+  0.38 - 0.45 & Well-Worn\\
+  0.45 - 1.00 & Battle-Scarred\\\hline
+\end{tabular}
+\end{center}
+
+Independent of wear, each item
+also has a $10\%$ chance of being StatTrak\texttrademark, where the
+gun includes a tracker that counts the number of kills a player has
+with this weapon. This number is reset on sale, so it can be treated
+simply as a binary indicator.
+
+The contents of the crate are divided into several tiers, based on
+their rarity from being obtained in a box. These tiers and their
+probability of being obtained are given below:
+
+\begin{center}
+\begin{tabular}{|c|l|}\hline
+Probability & Rarity\\\hline
+.0026 & Special (Gold)\\
+.0064 & Covert (Red)\\
+.032 & Classified (Pink)\\
+.1598 & Restricted (Purple)\\
+.7992 & Mil-spec (Blue)\\\hline
+\end{tabular}
+\end{center}
+
+\section{Model}
+
+\subsection{Discrete Choice Demand}
+
+
+
+Let us believe that individuals have a valuation for loot boxes as
+suggested by Cumulative Prospect Theory. Following a discrete choice
+framework for demand estimation, I assume that the utility of a
+consumer $i$ for loot box $j$ in time $t$ is given by:
+\begin{equation*}
+  u_{ijt} = V( x_{jt}, p_{jt}; \theta ) + \xi_{jt} + \epsilon_{ij} \quad \epsilon_{ij} \sim Gumbel
+\end{equation*}
+
+Where $V$ is the valuation for the loot box, $p_{jt}$ is the price,
+$x_{jt}$ are the covariates, $\xi_{jt}$ is some demand shock common to
+all consumers (this can be rationalized as unobserved benefits), 
+$\epsilon_{ij}$ is a type-1 extreme value shock unique to the consumer and
+good, and $\theta$ is the vector of parameters for the valuation function
+
+The demand for this good then is given by the probability that it has
+the maximum utility. This can be computed using the properties of the
+Type-1 extreme value distribution. The maximum follows a logistic
+distribution, and the probability is given by:
+
+\begin{equation*}
+  \Pr( i \rightarrow j ) = \frac{\exp( V(x_{jt},p_{jt} ; \theta) + \xi_{jt})}{ \sum_{k \in \mathcal{F}}
+    \exp(V(x_{jt},p_{jt}; \theta) + \xi_{kt})}
+\end{equation*}
+
+In this sense, demand is non-random, and the Econometrician observes
+the price of the box, the covariates of the box, as well as the
+equilibrium quantity $q_{jt}$. All facets here observed, save the fact
+that the price and quantity are equilibrium prices and quantity rather
+than various points along the same demand curve.
+
+Following the structure of Berry (1994) we consider an outside option
+that has some market share. The outside option is simply not partaking
+in any of the lotteries, and thus the valuation of this is $0$.
+However there is still some unobserved demand $\xi_{0t}$. Inversion to
+solve for this parameter is simple, as
+$\Pr( i \rightarrow 0) = \frac{\xi_0}{ \sum_{k \in \mathcal{F}} \exp(V(x_{jt},p_{jt}; \theta) +
+  \xi_k)}$.  Dividing each demand equation by the outside option and
+taking logs yields us:
+
+\begin{equation*}
+  \log s_{jt} - \log s_{0t} = V(x_{jt}, p_{jt}; \theta) + \xi_{jt}
+\end{equation*}
+
+Since $\xi_{jt}$ is unobserved by the econometrician, it takes the form
+of the unobserved error in the demand estimation procedure. However,
+it is sometimes endogenous to price as price is formed by the
+intersection of both supply and demand shocks. We need valid
+instruments for the estimation of this demand.
+
+\subsection{Instruments}
+
+Endogeneity occurs in this model via the simultaneity of supply and
+demand. Valid instruments for the price therefore must be supply
+shifters that do not affect the demand. Supply can be thought of as
+the players who have received a loot box randomly and wish to sell
+it. To simplify the dynamics of the problem, upon receiving the item
+individuals plan to sell it or not, so the supply of these loot boxes
+is heavily dependent on active players in that day and the previous
+day. 
+
+It is assumed that demand is a function of the long-run average number
+of players, or the amount of ``active players'' over the period of the
+month. This number is different from the daily players that play each
+day, as relatively few people are able to play each day for many
+reasons. However, loot boxes are given randomly to each player who
+plays in a day. We wish to use this fact to construct instruments for
+the demand. Suppose the true number of active players is $N$. Then daily
+players is $N + \epsilon_t$, i.e. some shock that determines daily
+player-base. We wish to use this shock $\epsilon_t$ as a cost-shifter that
+does not affect demand. If we estimate N by the average of all players
+over a significant time period, we can instrument demand using the
+daily deviations from this average. We instrument for price with the
+deviations of the current day of sale as well as the previous days.
+
+
+Supply can be thought of as upward sloping with an active price floor
+at a price of $.03$ which is often binding. In the set of transactions
+where the price floor is binding, there is no concern of simultaneity,
+and therefore price is exogenously determined by the existence of the
+price floor. Since we use multiple instruments for price in the
+endogenous case, the remaining instruments will be made zero for the
+exogenous price case. 
+
+Demand can then be estimated off of the condition that:
+\begin{equation*}
+  \exV{Z_t (\xi_{tj})} = 0 \quad \quad \quad \exV{ p_{jt} \xi_{jt} } = 0 \quad \text{When } p = \$.03
+\end{equation*}
+
+
+Also present in the data is active buy orders, these are orders
+that there is not yet supply to fulfill. However it is a dominant
+strategy for place your valuation as the bid. Therefore there is no
+concerns about shading, and we may treat these orders as true
+valuations. In the case of these estimates, we should find that demand
+shock is equal to zero, and uncorrelated with the valuation, or that
+$\exV{p_{jt}\xi_{jt}} = 0$. I note that the same choice and discrete
+choice framework holds for those that post unfulfilled buy orders, so
+there is no different model for valuations under the unfulfilled order
+framework. 
+
+This gives us price moments for each of the possible cases of the
+data. The rest of the covariates are the probabilities of obtaining
+each of the items, which are obviously exogenous and the last known
+prices of the contents of the loot boxes. We shall takes these prices
+as exogenous as they were determined by the supply and demand of the
+item in previous time periods.
+
+We may combine all of these into a vector $x_{jt}$ along with a
+constant term and our condition becomes one of
+$\exV{x_{jt}\xi_{jt}} = 0$. This provides us with $2k + 2$ moments per
+data point, when there are $k$ contents, and there are $3$
+parameters of interest to estimate. We are extremely over-identified,
+and may be able to consider more complicated functional forms given
+additional time.
+
+
+\subsection{Estimation}
+
+\begin{align*}
+  \xi_{jt} = \log s_{jt} - \log s_{0t} - V( x_{jt}, p_{jt}; \theta)
+\end{align*}
+
+
+Consider a matrix of exogenous variables $Z_j$ defined as above, we wish
+to estimate the parameters of $V$ based on the condition that this
+matrix is orthogonal to $\xi$. This could be accomplished using either
+Nonlinear Least-Squares or Generalized Method of Moments, I shall
+employ the latter.
+
+All of the orthogonality conditions combine to:
+\begin{equation*}
+  \exV{Z_{jt}'\xi_{jt}} = 0
+\end{equation*}
+
+The estimation procedure can be written as:
+
+\begin{align}
+  &\min_{\bm{\xi}_{j,t}, \xi_{j,t}} \sum_{j,t}\bm{\xi}_{j,t}' \Omega \bm{\xi}_{j,t}\\
+  \text{subject to: } &\xi_{j,t} = \log s_{jt} - \log s_{0t} - V( x_{jt}, p_{jt}; \theta)\\
+  &\bm{\xi}_{j,t} = \xi_{j,t} \bm{Z}_{j,t}  
+\end{align}
+
+
+
+\subsection{Cumulative Prospect Theory}
+
+
+We now examine the structure of the Valuation function $V( x_j,
+p_j; \theta)$. Denote the probabilities of each of the contents of the
+lotteries by $\pi_i$ and their values as $x_i$. We now re-index these by
+a permutation $s_i$ such that $x_{s_1} < x_{s_2} < ...$ and so on. The
+cumulative probability $\Pi_i$ can be written as $\sum_{i=1}^K
+\pi_{s_i}$. From these objects we can construct the value function for
+the lottery.
+
+Cumulative Prospect Theory includes several important concepts not
+observe in classical decision making under risk.It incorporates
+reference dependence, which implies that people view things in the
+context of losses and gains rather than changes to their overall
+wealth. This is attractive for computational reasons. It also utilizes
+loss aversion, the notion that losses are relatively more costly than
+gains. The model also incorporates diminishing sensitivity, the notion
+that valuations are concave in losses and convex in gains. The final
+concept is probability weighting, the notion that consumers act as if
+they were facing different probabilities than what they encounter.
+
+We note that the price of opening a case is two-fold, first the case
+must be bought at the market for its price, and then the price of the
+key, denoted $p_{key}$ must also be paid to open the case. The time
+required to open the case is trivial, and will not be
+considered. Since gains are treated differently than losses, let the
+parameterization of these gains and losses be defined as:
+
+\begin{equation*}
+  v(x) =
+  \begin{cases}
+    x^\alpha \quad &x \geq 0\\
+    -\lambda(-x)^\alpha \quad &x < 0
+  \end{cases}
+\end{equation*}
+
+In this sense, $\alpha$ captures the risk-loving or risk-averse nature of
+the consumer, while $\lambda$ captures their level of loss-aversion.
+
+
+In cumulative prospect theory, the cumulative mass (distribution)
+function is weighted such that individuals overweight the tail
+probabilities. This is especially important in this model, as there are
+many high valued rare items. If this is the case, a severely distorted
+distribution could lead to individuals systematically overvaluing
+lotteries despite even being risk-averse. Colloquially, it is believed
+that this concept is what allows for this type of randomization to
+flourish in a market that is primarily populated by young people.
+
+\begin{equation*}
+  w(P) = \frac{ P^\delta }{( P^\delta + (1-P)^\delta )^{\frac{1}{\delta}}}
+\end{equation*}
+
+For some item that is within the contents of the box, a consumer's
+valuation is transformed by the function:
+\begin{equation*}
+F(x_i) = \brak{w( \Pi_{s_i}) - w(\Pi_{s_i - 1}) } v( x_i - p_j - 2.50)
+\end{equation*}
+
+The valuation for the lottery can then be written as the sum of this
+transformation for all of the contents of the lottery:
+
+\begin{equation*}
+  V(x,\pi,p_j) = \sum_{i=1}^K F( x_i)
+\end{equation*}
+
+
+\section{Counterfactuals}
+
+Of interest is how much better this market structure is performing
+compared to a monopoly pricing schedule. This would require estimating
+the demand for the contents of the lottery, and then computing the
+optimal monopolist price for each good. 
+
+
+
+% I intend to estimate a structural model for the demand for the
+% contents of the boxes, using this, we can determine the distribution
+% of valuations for a risk-neutral consumer for the boxes, and then
+% estimate the risk-preference of the individuals that open the
+% loot-boxes. From there we can calculate the benefit of randomization
+% compared to selling each item at market.
+
+ \subsection{Demand Estimation}
+
+We wish to estimate the demand for this model using a discrete choice
+model for demand. This immediately raises the concern that it only
+allows for one good to be purchased, and it is common for individuals
+to have many weapon skins in the game. To this end, we shall split the
+market into several sub-markets and make a heavy identifying
+assumption. This assumption will allow for the discrete choice model
+to be applicable, and also creates price instruments for estimation.
+
+\begin{assume}
+  Items are split into markets defined by the in-game role that all of
+  the weapons in this market fulfill.
+\end{assume}
+
+These markets are defined by domain knowledge. For example, we treat
+the AK-47, the single most popular gun in the game as its own market,
+competing only with its own skin and condition variants. However, the
+M4A4 and the M4A1-S will be considered as competitors, as will the
+CZ75, Tec9, and Five-Seven. Weapons that fill the same role, or the
+same weapon slot will be considered in the same market. The assumption
+takes the form of claiming that one individuals do not substitute
+between roles, and only consider substitution between weapon skins for
+the same role. This ensures that consumers only purchase a single item
+at a time, as one could never equip multiple skins for the same
+role. The full power of this assumption will become clear in the
+instruments section.
+
+\subsubsection{BLP}
+
+To estimate the demand for the contents of the boxes, I intend to
+implement a standard BLP demand estimation model (1995). This is a discrete
+choice demand system. Consider $J$ goods in $T$ markets for $I$
+consumers indexed by $j,t,i$ respectively. Assuming quasilinear
+utility, the utility for consumer $i$ purchasing good $j$ is:
+
+\begin{equation*}
+  u_{ij} = \alpha_i p_j + x_j \beta_i + \xi_j + \epsilon_{ij}
+\end{equation*}
+
+Where $p_j$ is the price of good $j$, $x_j$ are the observed
+characteristics of good $j$, $\xi_j$ are the characteristics of good
+$j$ observed by consumers and producers but not by the econometrician,
+$\alpha_i, \beta_i$ are consumer i's individual preference parameters over
+these characteristics, and $\epsilon_{ij} \sim T1EV(0)$ is a random shock only
+observed by the consumer. This is a standard logit model, but we have
+unobserved heterogeneity among consumers.
+
+Consumer $i$ then chooses the good that gives him the highest utility,
+the probability that that good is good $j$ is given by:
+\begin{equation*}
+  \Pr( i \rightarrow j ) = \frac{\exp( \alpha_i p_j + x_j' \beta_i + \xi_j)}{\sum_{k \in
+      \mathcal{F}_t} \exp( \alpha_i p_k + x_k' \beta_i + \xi_k)}
+\end{equation*}
+
+Each consumer has individual logit demand. If we choose to normalize
+the mass of consumers to one, then the market share of good $j$ should
+be equal to the expected value of this individual demand, averaged
+over the distribution of valuations.
+
+\begin{equation*}
+  \pi_j = \exV{ \Pr( i \rightarrow j )}
+\end{equation*}
+
+Let us define the observed market shares as:
+\begin{equation*}
+  \hat{s}_j = \frac{1}{I} \sum_{i = 1}^I \indicate{y_i = j}
+\end{equation*}
+
+From the Weak Law of Large Numbers, we believe that $\hat{s}_j \plim
+\pi_j$. Define the distribution of $(\alpha_i, \beta_i)$ as $\theta$. By assuming that
+this convergence in probability has been reached, we arrive at:
+
+\begin{equation*}
+  \hat{s}_j \approx \exV{ \Pr( i \rightarrow j )} = \int \Pr( i \rightarrow j) d\theta \approx \frac{1}{N_s}
+  \sum_{i=1}^{N_s} \Pr( i \rightarrow j)
+\end{equation*}
+
+Where we approximate the integral of $\int \Pr( i \rightarrow j)d\theta$ through any
+numerical integration technique. This expression can then be inverted
+to solve for $\xi_j$, which is unobserved.
+
+\subsubsection{Instruments}
+
+In this specification of the model, there are two sets of endogenous
+variables. Price is obviously correlated with the unobserved
+characteristics of the model, but market share is also endogenous
+within the model. We shall require two sets of instruments, one for
+price, and one for market share.
+
+Valid price instruments are those that are correlated with supply
+shocks, but are not correlated with the demand shocks in the
+model. It is worth defining precisely what are the supply and demand
+for this model.
+
+The supply for each weapon skin is the set of people who have opened
+the loot box that contains that item and have elected to sell
+it. Shocks that will affect this are changes in consumer tastes
+leading to less people choosing to sell, as well as changes in the
+drop rates of the crates, controlling the flow of this item into the
+market.
+
+Demand for this good is the individuals who elect to buy the good at
+the market rather than attempt to earn it through opening loot
+boxes. The shocks that affect these people are entrance and exit to
+the market as well as changes in taste. (Needs more here)
+
+A Valid price instrument is something that is correlated with supply
+shocks, but not with the demand shocks. For this we will take the
+prices of the other contents of the box that are not in the same
+market as the good at hand. By Assumption 1, these prices are
+exogenous to the unobserved characteristics of the good at hand. They
+are however affected by the changes in the drop rate of the loot box
+that provides them, since they come from (nearly) the same
+supply. This is a form of the Hausman instruments used often in the
+literature.
+
+For market share, we intend to use the BLP instruments, which require
+that the valuation of one characteristic of a good is not random
+across the consumers. When this is satisfied, we may use the sum of
+the characteristics of the competitors of the good as instruments for
+the market share. If necessary, following \cite{OptimalBLPInstrument}, we
+may construct higher order approximations of the optimal instrument
+for the market shares using the observed characteristics.
+
+\subsubsection{Estimation}
+
+Once a set of instruments has been computed, estimation of the model
+requires using the orthogonality condition of the instruments against
+the computed values of $\xi_j$. Our orthogonality condition is:
+$\exV{\xi_j z_j} = 0$.
+
+This can be estimated using the generalized method of
+moments. Following the method of \cite*{MPEC}, we may estimate
+this using Mathematical Programming under Equality Constraints as
+follows: 
+
+\begin{align}
+  &\min_{\bm{\xi}_{j,t}, \xi_{j,t}} \bm{\xi}_{j,t}' \Omega \bm{\xi}_{j,t}\\
+    \text{subject to: } &s_{j,t} = \frac{1}{N_s} \sum_{i=1}^{N_s}
+                          \frac{\exp(\alpha_i p_j + x_j'\beta_i + \xi_j)}{\sum_{k\in
+                          \mathcal{F}_t} \exp( \alpha_i p_k + x_k'\beta_i +
+                          \xi_k)}\\
+  &\bm{\xi}_{j,t} = \xi_{j,t} \bm{z}_{j,t}  
+\end{align}
+
+This  method allows for the exploitation of sparseness in many
+commercial solvers. This is important as assumption 1 has imposed this
+level of sparseness on the model in part for computational ease.
+
+From these estimates, a monopoly pricing schedule that sets price
+where marginal revenue equals marginal cost for all goods can be
+computed, and its revenue compared to the revenue generated under the
+randomization scheme.
+
+
+%\nocite{OptimalBLPInstrument}
+%\nocite{SteamMarket}
+
+\bibliography{biblio}{}
+
+\end{document}
