@@ -11,6 +11,7 @@ PlayerBase = DataFrame( CSV.File( PlayerBaseFile))
 playerBaseFormat = @dateformat_str("y-m-d H:M:S")
 PlayerBase[:DateTime] = [DateTime( PlayerBase[j,1], playerBaseFormat )
                          for j in 1:size(PlayerBase,1)]
+fmt = @dateformat_str("u d y H")
 
 startDate = DateTime( "Feb 28 2018 01", fmt)
 endDate = DateTime( "Mar 31 2018 01", fmt)
@@ -26,6 +27,8 @@ AveragePlayers = mean(x.Players)
 #"Clutch Case.csv",
 #"Spectrum 2 Case.csv",
 Cases = ["Chroma 2 Case.csv","Chroma 3 Case.csv","Chroma Case.csv","CS:GO Weapon Case.csv","eSports 2013 Case.csv","eSports 2013 Winter Case.csv","eSports 2014 Summer Case.csv","Falchion Case.csv","Gamma 2 Case.csv","Gamma Case.csv","Glove Case.csv","Huntsman Weapon Case.csv","Operation Bravo Case.csv","Operation Breakout Weapon Case.csv","Operation Hydra Case.csv","Operation Phoenix Weapon Case.csv","Operation Vanguard Weapon Case.csv","Operation Wildfire Case.csv","Revolver Case.csv","Shadow Case.csv","Spectrum Case.csv","Winter Offensive Weapon Case.csv"]
+
+
 
 
 
@@ -64,26 +67,35 @@ function BuildCaseMatrix( Case::String, PlayerBase::DataFrame, AveragePlayers::F
     throwoutDate = DateTime( "Feb 28 2018 01", fmt)
 
     validRows = caseData[:Date] .>= throwoutDate
-    numRows = sum( validRows ) + size(caseDemandData,1)
-    rowset = []
-    for i in 1:size(caseData,1)
-        if validRows[i]
-            push!(rowset, i)
-        end
-    end
-    M = length(rowset)
+
+    temp = unique(Dates.yearmonthday.(caseData[validRows,1]))
+    
+    numRows = length( temp ) + size(caseDemandData,1)
+    # rowset = []
+    # for i in 1:size(caseData,1)
+    #     if validRows[i]
+    #         push!(rowset, i)
+    #     end
+    # end
+    M = length(temp)
 
 
     contentPrices = Matrix{Float64}(undef,numRows,size(contents,1))
     contentProbs = Matrix{Float64}(undef,numRows,size(contents,1))
     
     dataMat = Matrix{Float64}(undef,numRows,7)
-    for i in 1:length(rowset)
-        date = caseData[rowset[i],1]
-        dataMat[i,1] = caseData[rowset[i],2]
-        dataMat[i,2] = caseData[rowset[i],3]
+    for i in 1:length(temp)
+        date = temp[i]#caseData[rowset[i],1]
+        rows = @from j in caseData begin
+            @where Dates.yearmonthday(j.Date) == date 
+            @select { j.Date, j.Price, j.Quantity }
+            @collect DataFrame
+        end
 
-        playerBaseIndex = findfirst( x-> x > date,PlayerBase[:,1])-1
+        dataMat[i,2] = sum( rows[:,3])
+        dataMat[i,1] = sum(rows[:,2] .* rows[:,3]) / dataMat[i,2]#caseData[rowset[i],2]
+
+        playerBaseIndex = findfirst( x-> Dates.yearmonthday(x) == date,PlayerBase[:,1])
         #Price is exogenous if the price floor is binding.
         if dataMat[i,1] > .03
             dataMat[i,3] = AveragePlayers - PlayerBase[playerBaseIndex,2]
@@ -94,12 +106,12 @@ function BuildCaseMatrix( Case::String, PlayerBase::DataFrame, AveragePlayers::F
         end
         
         
-        dataMat[i,5] = 1
+        dataMat[i,5] = PlayerBase[playerBaseIndex,2]
         dataMat[i,6] = size(contents,1)
         
         for j in 1:size(contents,1)
             #Get the most recent transaction before the date posted
-            index = findfirst( x-> x > date,weaponData[j][:,1])
+            index = findfirst( x-> Dates.yearmonthday(x) > date,weaponData[j][:,1])
             #If there was nothing sold during this month, we can only use
             #the most recent transaction, but the findfirst will return
             #nothing so we must manually check for this
@@ -109,7 +121,7 @@ function BuildCaseMatrix( Case::String, PlayerBase::DataFrame, AveragePlayers::F
                 index -= 1
             end
             
-            contentPrices[i,j] = weaponData[j][index,2] - 2.5
+            contentPrices[i,j] = weaponData[j][index,2] - 2.5 - dataMat[i,1]
             contentProbs[i,j] = contents[j,4]
             #dataMat[i,colIndex+1] = weaponData[j][index,3]
         end
@@ -130,7 +142,7 @@ function BuildCaseMatrix( Case::String, PlayerBase::DataFrame, AveragePlayers::F
             # For active buy orders, use the last available price
             index = size(weaponData[j],1)
             
-            contentPrices[i,j] = weaponData[j][index,2] - 2.5
+            contentPrices[i,j] = weaponData[j][index,2] - 2.5 - dataMat[i,1]
             contentProbs[i,j] = contents[j,4]
         end
         dataMat[i,7] = sum(contentPrices[i,:] .< 0.0)
@@ -154,9 +166,29 @@ function BuildCaseMatrix( Case::String, PlayerBase::DataFrame, AveragePlayers::F
     return dataMat,contentProbs,contentPrices
 end
 
-caseMats = Vector{Matrix{Float64}}(undef,length(Cases))
+dataMat = Vector{Matrix{Float64}}(undef,length(Cases))
+contentProbs = Vector{Matrix{Float64}}(undef,length(Cases))
+contentPrices = Vector{Matrix{Float64}}(undef,length(Cases))
 for i in 1:length(Cases)
-    caseMats[i] = BuildCaseMatrix(Cases[i], PlayerBase)
+    dataMat[i],contentProbs[i],contentPrices[i] =
+        BuildCaseMatrix(Cases[i], PlayerBase,AveragePlayers)
 end
 
-dat,Probs,Prices = BuildCaseMatrix(Case, PlayerBase, AveragePlayers)
+
+J = 22
+
+for i in 1:length(Cases)
+    println( size( contentProbs[i]))
+end
+
+T = 31
+
+outsideOption = Vector{Float64}(undef,T)
+for t in 1:T
+    outsideOption[t] = AveragePlayers - sum( dataMat[i][t,2] for i in 1:J)
+    for i in 1:J
+        dataMat[i][t,2] = log(dataMat[i][t,2] / AveragePlayers)
+        dataMat[i][t,5] = log(outsideOption[t] / AveragePlayers)
+    end
+end
+
