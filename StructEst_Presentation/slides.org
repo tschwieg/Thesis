@@ -1,0 +1,104 @@
+#+STARTUP: beamer 
+#+LATEX_CLASS: beamer
+#+BEAMER_THEME: Montpellier
+#+LaTeX_CLASS_OPTIONS: [bigger]
+#+OPTIONS: H:2 toc:nil
+#+toc: nil
+#+TITLE: The benefits of Randomization Mechanisms in Counter-Strike: Global Offensive
+#+AUTHOR: Timothy Schwieg
+#+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
+
+
+* Topic
+** Loot Boxes
+
+- Many video games have chosen to sell cosmetic alterations to their
+  games using randomization mechanisms called ``loot boxes''
+- Economic Literature tells us that there is no benefit to
+  randomization for risk-neutral consumers, so the benefit must come
+  from risk-loving consumers.
+- What aspect of these lotteries is generating the revenue for the
+  companies selling them?
+- How much more revenue-generating is this compared to traditional
+  selling mechanisms?
+
+** Why do we care?
+- We are interested in discovering what drives this market to feature
+  randomization mechanisms.
+- Are consumers inherently more risk-loving when they play video
+  games?
+- Is this driven by consumers over-weighting tiny probabilities as
+  cumulative prospect theory suggests?
+- Are consumers weighing benefits and losses differently?
+- What is the magnitude of these gains from randomization?
+
+* Data
+** The Data
+- Contains complete market history for all items sold in the Steam
+  Community Market for /Counter-Strike: Global Offensive/
+- Market history is specific to the hour for the last 30 days,
+  specific to the day for the remaining time the item has existed.
+- Contains all active buy and sell orders for each of these items as
+  of March 31^st 2018.
+- Number of active players per day and unique twitch viewers per day
+
+* Model
+
+** Discrete Choice - Berry (1994)
+
+Utility for these lotteries is quasi-linear
+\begin{equation*}
+  u_{ijt} = V( x_{jt}, p_{jt}; \theta ) + \xi_{jt} + \epsilon_{ij} \quad \epsilon_{ij} \sim Gumbel
+\end{equation*}
+
+Consumers choose the lottery that has the highest utility for them: 
+
+\begin{equation*}
+  \Pr( i \rightarrow j ) = \frac{\exp( V(x_{jt},p_{jt} ; \theta) + \xi_{jt})}{ \sum_{k \in \mathcal{F}}
+    \exp(V(x_{jt},p_{jt}; \theta) + \xi_{kt})}
+\end{equation*}
+
+Using an outside option that is normalized so that it has zero
+utility:
+
+\begin{equation*}
+  \log s_{jt} - \log s_{0t} = V(x_{jt}, p_{jt}; \theta) + \xi_{jt}
+\end{equation*}
+
+
+
+** Cumulative Prospect Theory
+- Four main components: Reference dependence, loss aversion,
+  diminishing sensitivity, and probability weighting
+#+BEGIN_EXPORT latex
+\begin{align*}
+  \Pi_{s_i} &= \sum_{j=1}^{s_i} \pi_{s_j}\\
+  v(x) &=
+  \begin{cases}
+    x^\alpha \quad &x \geq 0\\
+    -\lambda(-x)^\alpha \quad &x < 0
+  \end{cases}\\
+  w(P) &= \frac{ P^\delta }{( P^\delta + (1-P)^\delta )^{\frac{1}{\delta}}}\\
+  \\
+  F(x_i) &= \brak{w( \Pi_{s_i}) - w(\Pi_{s_i - 1}) } v( x_i - p_j - 2.50)
+\end{align*}
+#+END_EXPORT
+
+
+
+** Estimation
+- Price is determined by intersection of supply and demand and is
+  therefore endogenous
+- Instrument with the changes in daily player base from the average
+  number of players
+
+\begin{align*}
+  \xi_{jt} = \log s_{jt} - \log s_{0t} - V( x_{jt}, p_{jt}; \theta)
+\end{align*}
+Using the orthogonality of $\xi_{jt}$ to the instruments and exogenous
+parameters:
+\begin{align*}
+  &\min_{\bm{\xi}_{j,t}, \xi_{j,t}} \sum_{j,t}\bm{\xi}_{j,t}' \Omega \bm{\xi}_{j,t}\\
+  \text{subject to: } &\xi_{j,t} = \log s_{jt} - \log s_{0t} - V( x_{jt}, p_{jt}; \theta)\\
+  &\bm{\xi}_{j,t} = \xi_{j,t} \bm{Z}_{j,t}  
+\end{align*}
