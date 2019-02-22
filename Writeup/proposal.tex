@@ -92,7 +92,7 @@ consumers. This begs the question of how much money are these
 companies gaining by exploiting the risk-loving nature of the
 consumers.
 
-Counter-Strike global offensive presents an interesting case study for
+Counter-Strike: Global Offensive presents an interesting case study for
 these types of markets, as there is a secondary market where
 individuals can buy and sell these loot boxes, as well as their
 contents. This was one of the first games to introduce the concept of
@@ -103,21 +103,74 @@ boxes, as required by Chinese Law. Because the supply of the boxes is
 strictly controlled, the market for these items is lively, with many
 items trading for hundreds of dollars, and a few entering the thousands.
 
-
 These factors combine to allow for a structural estimation of demand,
-and risk-tolerance. I intend to combine a discrete choice demand
+and risk-preference. I intend to combine a discrete choice demand
 estimation model with Cumulative Prospect Theory to estimate the
 monetary value of randomization in the market for weapon skins in
 Counter-Strike Global Offensive.
 
 \section{Literature Review}
 
-The literature in demand estimation is primarily focused around the
-seminal paper written by \cite*{BLP}. This paper presents a framework
-for estimation of a heterogenous consumers in a discrete choice logit
-demand framework. This allows for a richer substitution framework, and
-an ability for the substitution affects to escape the independence of
-irrelevant alternatives result of traditional logit demand.
+\cite*{LitReview} presents a broad review of where Prospect theory has
+been applied, as well as its problems with its application,
+particularly in the choice of a reference point, which appears to be
+very significant, but there is little guidance on what to choose
+beyond possibly the expected value of the lottery. Applications of the
+model, originally proposed by \cite*{Kahn} exist mostly in finance and
+insurance. I intend to extend this body to look at the behavior of
+non-expert individuals in a market scenario. I believe that this area
+has not had many applications, likely because of the rarity of quality
+data outside of these fields.
+
+The literature on Cumulative Prospect theory, the main structure of
+this model is primarily focused on experimental data. The literature
+began with the paper by \cite*{ProspectTheory} that suffered from
+problems relating to stochastic dominance, and was updated in 1992
+with their paper on cumulative prospect theory. 
+
+\cite*{GONZALEZ1999129} give a discussion on the interpretation and
+development of the probability weighting function used in cumulative
+prospect theory as well as several forms and their ensuing
+interpretations. The different parameters are identified with respect
+to psychological phenomena found relevant to the decision making
+process. Thus ``identification'' in the reduced-form sense of
+interpretation of the parameters become much more possible, as there
+are many dimensions of the model.
+
+While most of the literature has been focused on the experimental
+setting, or high level financial decision making such as \cite*{Thaler1995}.
+\cite*{Sydnor2010} presents an application of prospect theory to real-world
+data. He uses data on homeowner's choices on deductibles for
+home-insurance policies as a measure of moderate financial risks. The
+main body of the paper focuses on the standard expected utility
+framework, but it is extended to cumulative prospect theory in a
+discussion. There is however no empirical work with prospect theory on
+the data, as there is substantial heterogeneity within the data.
+
+\cite*{Barseghyan2012} form a structural model based on a discrete
+choice model, and non-parmetrically estimate the utility function as
+evidence for the existence of probability weights in insurance
+choices. This can be explained by cumulative prospect theory's
+decision weighting scheme. Much of the literature on experiments in
+this field also shows that the results are sensitive to the
+experimental conditions, \cite*{PlottZeiler}
+
+\cite{LitReview} discuss the use of preference for lottery-payoffs for
+encouraging behaviors, which is relevant to my market. However the
+literature is underdeveloped, likely due to its legal nature in the
+United States.
+
+
+The demand estimation framework that I intend to employ is the
+discrete-choice demand framework introduced by McFadden (1971). This
+paper was extended to demand estimation with a shock in \cite{Berry1994}
+that is the model I intend to emulate for my discrete choice
+estimation. Heterogeneity was introduced into this framework in the
+seminal paper by \cite*{BLP} that develops the multinomial logit
+demand system that is common in demand estimation today. This
+alleviates some of the theoretical problems that are created by the
+structure of the discrete choice estimation, namely independence of
+irrelevant alternatives. 
 
 One such example of estimation is the paper by \cite*{Cereal}. It
 estimates the demand in the cereal industry in order to determine the
@@ -140,19 +193,25 @@ performs extremely well under sparse Hessian and gradients, of which
 my method contains many. This will allow for significantly easier
 estimation of the demand system.
 
-\cite*{LitReview} presents a broad review of where Prospect theory has
-been applied, as well as its problems with its application,
-particularly in the choice of a reference point, which appears to be
-very significant, but there is little guidance on what to choose
-beyond possibly the expected value of the lottery. Applications of the
-model, originally proposed by \cite*{Kahn} exist mostly in finance and
-insurance. I intend to extend this body to look at the behavior of
-non-expert individuals in a market scenario. I believe that this area
-has not had many applications, likely because of the rarity of quality
-data outside of these fields.
 
-The literature on Cumulative Prospect theory, the main structure of
-this model is primarily focused on experimental data. 
+There is a focus on using Discrete choice models with prospect theory
+that has appeared in the Travel Behavior Literature. Such as
+Li,Hensher 2006 and De Palma, Picard, Waddell 2007 and Avineri and
+Prashker 2005. This literature, inspired by \cite*{dePalmaEtAl}, uses
+different behavioral models of individual behavior under lotteries
+directly in the utility specification of discrete choice. The paper
+discusses the different function forms and choices made by the
+researched in choosing the behavioral model to estimate choices.  The
+emphasis on the behavioral models, in particular De Palma, is on
+improving prediction rather than better explanatory power for the
+model. In particular, all of these exercises use simulated data or
+laboratory experiments to evaluate consumer's decision making, rather
+than estimating parameters from market choices that are
+observed. These problems manifest themselves in a lack of a measure of
+willingness to pay as well and reference point, making estimation of
+the parameters difficult when it is even attempted. Li also notes that
+the existing literature on transport fails to address individual
+specific heterogeneity as well.
 
 
 \section{Data}
@@ -180,6 +239,7 @@ knowledge. That is, the contents of the crate follow a known
 distribution, and can therefore be estimated under theories of
 risk. The contents of the crate can then be held onto, or sold at
 market.
+ 
 
 \subsection{Market}
 
@@ -217,7 +277,7 @@ value, between $0$ and $1$, which indicates the wear on the
 weapon. Wear does not change with use, and is determined when a weapon
 is un-boxed. This float is distributed uniformly, but based on its
 value, places the weapon into different brackets for sale. We will
-consider all weapons in a particular bracket as homogenous.
+consider all weapons in a particular bracket as homogeneous.
 \begin{center}
 \begin{tabular}{|l|l|}\hline
   Float & Condition\\\hline
@@ -291,7 +351,7 @@ that has some market share. The outside option is simply not partaking
 in any of the lotteries, and thus the valuation of this is $0$.
 However there is still some unobserved demand $\xi_{0t}$. Inversion to
 solve for this parameter is simple, as
-$\Pr( i \rightarrow 0) = \frac{\xi_0}{ \sum_{k \in \mathcal{F}} \exp(V(x_{jt},p_{jt}; \theta) +
+$\Pr( i \rightarrow 0) = \frac{1}{ \sum_{k \in \mathcal{F}} \exp(V(x_{jt},p_{jt}; \theta) +
   \xi_k)}$.  Dividing each demand equation by the outside option and
 taking logs yields us:
 
@@ -466,6 +526,11 @@ transformation for all of the contents of the lottery:
 \begin{equation*}
   V(x,\pi,p_j) = \sum_{i=1}^K F( x_i)
 \end{equation*}
+
+
+\section{Heterogeneity}
+
+
 
 
 \section{Counterfactuals}
