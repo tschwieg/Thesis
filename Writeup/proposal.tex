@@ -310,11 +310,19 @@ Probability & Rarity\\\hline
 \end{tabular}
 \end{center}
 
+However between lotteries there is substantial hetoegeneity in the
+amount of contents in each of these brackets. The largest amount of
+heterogeneity is in the Gold tier.  Several of these lotteries have in
+excess of a hundred possible contents, reaching a maximum of 236, most
+of which are in the gold tier. This leads to an extremely large amount
+of items with extremely low probabilities of being unboxed. This
+provides a distinction between two groups of lotteries, ones with many
+rare items, and the others where they are distributed evenly among the
+brackets. 
+
 \section{Model}
 
 \subsection{Discrete Choice Demand}
-
-
 
 Let us believe that individuals have a valuation for loot boxes as
 suggested by Cumulative Prospect Theory. Following a discrete choice
@@ -404,7 +412,6 @@ Demand can then be estimated off of the condition that:
   \exV{Z_t (\xi_{tj})} = 0 \quad \quad \quad \exV{ p_{jt} \xi_{jt} } = 0 \quad \text{When } p = \$.03
 \end{equation*}
 
-
 Also present in the data is active buy orders, these are orders
 that there is not yet supply to fulfill. However it is a dominant
 strategy for place your valuation as the bid. Therefore there is no
@@ -416,12 +423,15 @@ choice framework holds for those that post unfulfilled buy orders, so
 there is no different model for valuations under the unfulfilled order
 framework. 
 
-This gives us price moments for each of the possible cases of the
-data. The rest of the covariates are the probabilities of obtaining
-each of the items, which are obviously exogenous and the last known
-prices of the contents of the loot boxes. We shall takes these prices
-as exogenous as they were determined by the supply and demand of the
-item in previous time periods.
+This gives us instruments to identify price effects for each of the
+possible cases of the data. The rest of the covariates are the
+probabilities of obtaining each of the items, which are obviously
+exogenous and the last known prices of the contents of the loot
+boxes. We shall takes these prices as exogenous as they were
+determined by the supply and demand of the item in previous time
+periods. In this sense we are completely abstracting the problems from
+dynamic choices regarding optimal opening of boxes or strategies in
+continuous time double auctions. 
 
 We may combine all of these into a vector $x_{jt}$ along with a
 constant term and our condition becomes one of
@@ -453,10 +463,17 @@ All of the orthogonality conditions combine to:
 The estimation procedure can be written as:
 
 \begin{align}
-  &\min_{\bm{\xi}_{j,t}, \xi_{j,t}} \sum_{j,t}\bm{\xi}_{j,t}' \Omega \bm{\xi}_{j,t}\\
-  \text{subject to: } &\xi_{j,t} = \log s_{jt} - \log s_{0t} - V( x_{jt}, p_{jt}; \theta)\\
+  &\min_{\bm{\xi}_{j,t}, \xi_{j,t}, \beta_0, \theta} \sum_{j,t}\bm{\xi}_{j,t}' \Omega \bm{\xi}_{j,t}\\
+  \text{subject to: } &\xi_{j,t} = \log s_{jt} - \log s_{0t} - \beta_0
+                        - V( x_{jt}, p_{jt}; \theta)\\
   &\bm{\xi}_{j,t} = \xi_{j,t} \bm{Z}_{j,t}  
 \end{align}
+
+Where $\beta_0$ is an estimated constant that incorporates the expected
+value of $\xi$ and the normalization utility of the outside option. We
+will not interpret it as meaningful Economically. For the weighting
+matrix $\Omega$, we follow the standard of using the two-stage
+least-squares weighting matrix $\inv{Z'Z}$. 
 
 
 
@@ -500,7 +517,6 @@ parameterization of these gains and losses be defined as:
 In this sense, $\alpha$ captures the risk-loving or risk-averse nature of
 the consumer, while $\lambda$ captures their level of loss-aversion.
 
-
 In cumulative prospect theory, the cumulative mass (distribution)
 function is weighted such that individuals overweight the tail
 probabilities. This is especially important in this model, as there are
@@ -527,18 +543,30 @@ transformation for all of the contents of the lottery:
   V(x,\pi,p_j) = \sum_{i=1}^K F( x_i)
 \end{equation*}
 
+In this manner, this structure nests a the hyperbolic absolute risk
+aversion utility function of $U(X) = \sum p(x) x^{\alpha}$ often employed for
+its tractability. This corresponds to $\delta = 1, \lambda = 1$. In this sense,
+testing for these parameter values can be thought of as a test of
+whether or not there is any additional information gained through the
+application of the behavioral model for lottery valuations.
+
 
 \section{Heterogeneity}
 
+In the current framework, many of these lotteries have a
+negative utility level, and the decision to buy occurs from a high draw
+in the $\epsilon_{ij}$. In homogeneity requires that for the low-market share
+goods with low price, the only explanation is that the lottery appears
+to be a bad deal, but some individuals simply observe a good shock and
+buy anyways.
+
+I prefer a stronger mechanism for explaining the variation in
+market shares among the low-priced lotteries, and will attempt to
+explore this by considering heterogeneous valuations of the contents
+of the lotteries that are not independent. To this end we will conduct
+an estimation of demand using a multinomial logit-demand model. 
 
 
-
-\section{Counterfactuals}
-
-Of interest is how much better this market structure is performing
-compared to a monopoly pricing schedule. This would require estimating
-the demand for the contents of the lottery, and then computing the
-optimal monopolist price for each good. 
 
 
 
@@ -698,6 +726,40 @@ follows:
 This  method allows for the exploitation of sparseness in many
 commercial solvers. This is important as assumption 1 has imposed this
 level of sparseness on the model in part for computational ease.
+
+\subsection{Lottery Estimation Under Heterogeneity}
+
+Following the estimation procedure above nets estimates of the
+distribution of valuations that individuals in the market have for
+each of the items. However, the presence of the secondary market that
+they are able to re-enter complicates this, as any person with a
+valuation below the market price could simply sell their item on the
+market, earning that price. We shall take their valuations as the
+maximum between the observed market price and the estimate of the
+internal valuation. We shall refer to this maximum as $x_{ijt}$, or
+the valuation of consumer $i$ of content $j$ at time $t$
+
+However, if we were to estimate the lotteries and the demand
+separately, the model would be under-identified, as there would no
+longer be an exogenous variation in the lottery contents prices to
+provide identification of the different parameters of the lottery. The
+exogeneity we need must come from the demand estimation, and therefore
+the two procedures must be run simultaneously, ensuring a sense of
+equilibrium between the secondary market and the lottery market. 
+
+This essentially is adding another set of goods to the demand
+estimation, but requiring that the draws of their valuations come from
+the draws used in each of the ``roles'' in the demand estimation. 
+
+
+
+\section{Counterfactuals}
+
+Of interest is how much better this market structure is performing
+compared to a monopoly pricing schedule. This would require estimating
+the demand for the contents of the lottery, and then computing the
+optimal monopolist price for each good. 
+
 
 From these estimates, a monopoly pricing schedule that sets price
 where marginal revenue equals marginal cost for all goods can be
