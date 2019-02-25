@@ -39,6 +39,18 @@ function BuildCaseMatrix( Case::String, PlayerBase::DataFrame, AveragePlayers::F
 
     contents = DataFrame( CSV.File(contentFile,allowmissing=:none,header=[:Gun,:Skin,:Wear,:Prob]))
 
+    # sumCont = sum(contents[:,4])
+    # for i in 1:size(contents,1)
+    #     contents[i,4] = contents[i,4] / sumCont
+    #     # Sometimes we have floating point problems where the final
+    #     # value is equal to 1.000000000000001
+    #     if( contents[i,4] > 1.0)
+    #         contents[i,4] = 1.0
+    #     end
+        
+    # end
+    
+
     weaponData = Vector{DataFrame}(undef,size(contents,1))
 
     fmt = @dateformat_str("u d y H")
@@ -83,7 +95,7 @@ function BuildCaseMatrix( Case::String, PlayerBase::DataFrame, AveragePlayers::F
     contentPrices = Matrix{Float64}(undef,numRows,size(contents,1))
     contentProbs = Matrix{Float64}(undef,numRows,size(contents,1))
     
-    dataMat = Matrix{Float64}(undef,numRows,7)
+    dataMat = Matrix{Float64}(undef,numRows,8)
     for i in 1:length(temp)
         date = temp[i]#caseData[rowset[i],1]
         rows = @from j in caseData begin
@@ -97,16 +109,17 @@ function BuildCaseMatrix( Case::String, PlayerBase::DataFrame, AveragePlayers::F
 
         playerBaseIndex = findfirst( x-> Dates.yearmonthday(x) == date,PlayerBase[:,1])
         #Price is exogenous if the price floor is binding.
-        if dataMat[i,1] > .03
+        #if dataMat[i,1] > .03
             dataMat[i,3] = AveragePlayers - PlayerBase[playerBaseIndex,2]
             dataMat[i,4] = AveragePlayers - PlayerBase[playerBaseIndex-1,2]
-        else
-            dataMat[i,3] = .03
-            dataMat[i,4] = 0.0
-        end
+            dataMat[i,8] = 0.0
+        # else
+        #     dataMat[i,3] = 0.0#.03
+        #     dataMat[i,4] = 0.0
+        #     dataMat[i,8] = .03
+        # end
         
         
-        dataMat[i,5] = PlayerBase[playerBaseIndex,2]
         dataMat[i,6] = size(contents,1)
         
         for j in 1:size(contents,1)
@@ -125,6 +138,7 @@ function BuildCaseMatrix( Case::String, PlayerBase::DataFrame, AveragePlayers::F
             contentProbs[i,j] = contents[j,4]
             #dataMat[i,colIndex+1] = weaponData[j][index,3]
         end
+        #dataMat[i,1] = 0.0
         dataMat[i,7] = sum(contentPrices[i,:] .< 0.0)
     end
     for i in (M+1):numRows
@@ -133,9 +147,9 @@ function BuildCaseMatrix( Case::String, PlayerBase::DataFrame, AveragePlayers::F
 
         playerBaseIndex = size(PlayerBase,1)
         #Non censored data doesn't need instruments - price is exogenous
-        dataMat[i,3] = dataMat[i,1]#PlayerBase[playerBaseIndex,2]
+        dataMat[i,3] = 0.0 #dataMat[i,1]#PlayerBase[playerBaseIndex,2]
         dataMat[i,4] = 0.0#PlayerBase[playerBaseIndex,4]
-        dataMat[i,5] = 0
+        dataMat[i,5] = dataMat[i,1]
         dataMat[i,6] = size(contents,1)
         
         for j in 1:size(contents,1)
@@ -146,6 +160,7 @@ function BuildCaseMatrix( Case::String, PlayerBase::DataFrame, AveragePlayers::F
             contentProbs[i,j] = contents[j,4]
         end
         dataMat[i,7] = sum(contentPrices[i,:] .< 0.0)
+        dataMat[i,8] = dataMat[i,1] = caseDemandData[i-M,1]
     end
 
     for i in 1:numRows
@@ -174,21 +189,72 @@ for i in 1:length(Cases)
         BuildCaseMatrix(Cases[i], PlayerBase,AveragePlayers)
 end
 
+J = length(Cases)
 
-J = 22
 
-for i in 1:length(Cases)
+# for j in 1:J
+#     exVal = zeros(size(contentProbs[j],1))
+#     for i in 1:size(contentProbs[j],1)
+#         prev = 0.0
+#         for k in 1:size(contentProbs[j],2)
+#             prob = contentProbs[j][i,k] - prev
+#             #println(prob*contentPrices[j][i,k])
+#             exVal[i] += prob*contentPrices[j][i,k]
+#             prev += prob
+#         end
+#     end
+#     for k in 1:size(contentProbs[j],2)
+#         contentPrices[j][:,k] -= dataMat[j][:,1] .+ 2.5# + exVal
+#     end
+#     for i in 1:size(contentProbs[j],1)
+#         dataMat[j][i,7] = sum(contentPrices[j][i,:] .< 0.0)
+#     end
+# end
+
+
+
+
+
+for i in 1:J
     println( size( contentProbs[i]))
 end
 
-T = 31
+T = Vector{Int64}(undef,J)
+T .= 31
 
-outsideOption = Vector{Float64}(undef,T)
-for t in 1:T
-    outsideOption[t] = AveragePlayers - sum( dataMat[i][t,2] for i in 1:J)
-    for i in 1:J
-        dataMat[i][t,2] = log(dataMat[i][t,2] / AveragePlayers)
-        dataMat[i][t,5] = log(outsideOption[t] / AveragePlayers)
+for j in 1:J
+    for i in 1:size(contentProbs[j],1)
+        if( dataMat[j][i,3] == 0.0 )
+            T[j] = i-1
+            break
+        end
     end
 end
+
+outsideOption = 0.0
+for j in 1:J
+    global outsideOption
+    outsideOption += mean(dataMat[j][:,2])
+end
+outsideOption /= convert(Float64, J )
+
+
+for i in 1:J
+   
+    for t in (T[i]+1):size(contentProbs[i],1)
+        #newOutOption = AveragePlayers - sum( dataMat[j][T,2] for j in 1:J) - dataMat[i][t,2]
+        newOutOption = mean( dataMat[j][T[i],2] for j in 1:J)
+        dataMat[i][t,2] = log((dataMat[i][t,2] + dataMat[i][T[i],2]) )
+        dataMat[i][t,5] = log(newOutOption )
+    end
+end
+
+    
+for i in 1:J
+        for t in 1:T[i]
+        dataMat[i][t,2] = log(dataMat[i][t,2] )
+        dataMat[i][t,5] = log(outsideOption )
+    end
+end
+
 

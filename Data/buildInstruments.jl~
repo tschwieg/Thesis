@@ -1,6 +1,9 @@
 using DataFrames
 using Query
 using CSV
+using Statistics
+using JuMP
+using KNITRO
 
 df = DataFrame( CSV.File("contents.csv",allowmissing=:none))
 
@@ -14,7 +17,7 @@ newdf = @from i in df begin
     @collect DataFrame
 end
 
-newdf = hcat(DataFrame(convert( Matrix{Int64}, zeros(nRows,1))),newdf,DataFrame(zeros(nRows,10)))
+newdf = hcat(DataFrame(convert( Matrix{Int64}, zeros(nRows,1))),newdf,DataFrame(zeros(nRows,10)),makeunique=true)
 rename!(newdf, names(newdf), [:key,:prices,:shares,:usage,:condition,:rarity,:statTrak,:role,:z1,:z2,:z3,:z4,:z5,:z6,:z7,:z8,:z9,:z10])
 
 for i in 1:nRows
@@ -50,23 +53,149 @@ for i in 1:nRows
     #println(i)
 end
 
-newdf[:quantity] ./=  sum(df[j,2] for j in 1:nRows)
+newdf[:shares] ./=  sum(df[j,2] for j in 1:nRows)
 
-for r in roles
-    roleData = @from i in newdf begin
-        @where i.role == r
+newdf[:rarity] = convert( Vector{Int64},newdf[:rarity])
+
+RoleDF = Vector{DataFrame}(undef,length(roles))
+
+for r in 1:length(roles)
+    RoleDF[r] = @from i in newdf begin
+        @where i.role == roles[r]
         @select {i.key, i.prices, i.shares, i.usage, i.condition, i.rarity, i.statTrak,i.z1,i.z2,i.z3,i.z4,i.z5,i.z6,i.z7,i.z8,i.z9,i.z10}
         @collect DataFrame
     end
-    rows = size(roleData)[1]
+    rows = size(RoleDF[r])[1]
     for i in 1:rows
-        roleData[i,1] = i
+        RoleDF[r][i,1] = i
     end
-    io = open("Roles/" * r * ".tab", "w")
-    write(io,"1iampl.tab 1 16\n")
-    CSV.write( io, roleData, delim = "   ")
-    close(io)
+    # io = open("Roles/" * roles[r] * ".tab", "w")
+    # write(io,"1iampl.tab 1 16\n")
+    # CSV.write( io, RoleDF[r], delim = "   ")
+    # close(io)
+end
+
+dat = @from i in newdf begin
+        #@where i.role != "knife"
+        @select {i.key, i.prices, i.shares, i.usage, i.condition, i.rarity, i.statTrak,i.z1,i.z2,i.z3,i.z4,i.z5,i.z6,i.z7,i.z8,i.z9,i.z10}
+        @collect DataFrame
+end
+
+β = Vector{Vector{Float64}}(undef,length(roles))
+
+for r in 2:length(roles)
+    dat = RoleDF[r]
+    #Make sure the instrument matrix is full rank
+    cols = convert( Vector{Int64}, 4:(size(dat)[2]) )
+    goodCols = []
+    for i in 1:length(cols)
+
+        mat = hcat( ones(size(dat)[1],1), convert( Matrix{Float64}, hcat( dat[:,goodCols], dat[:,cols[i]] ) ))
+        if( det( mat'*mat ) > 1e-7 )
+            #deleteat!( zCol,findfirst( x -> x == cols[i], zCol))
+            push!( goodCols, cols[i])
+        end
+    end
+    cols = copy(goodCols)
+
+    endCols = [2,4,5,6,7]
+    goodCols = []
+    for i in 1:length(endCols)
+        mat = hcat( ones(size(dat)[1],1), convert( Matrix{Float64}, hcat( dat[:,goodCols],
+                                                                          dat[:,endCols[i]] ) ))
+        if( det( mat'*mat ) > 1e-7 )
+            #deleteat!( zCol,findfirst( x -> x == cols[i], zCol))
+            push!( goodCols, endCols[i])
+        end
+    end
+    endCols = copy(goodCols)
+
+
+    outsideOption = 1.0 - sum( dat[:shares])
+
+    Z = hcat( ones(size(dat)[1]), convert(Matrix{Float64},dat[:,cols]))
+
+    Y = log.(convert( Vector{Float64}, dat[:shares])) .- log( outsideOption)
+
+
+    X = hcat( ones(size(dat)[1]), convert(Matrix{Float64},dat[:,endCols]))
+
+    W = inv(Z'*Z)
+
+
+    coefs = length(endCols)
+    nInst = size(Z,2)
+
+    nPeople = 25
+    people = rand(Normal(),nPeople,coefs)
+    
+    N = size(X,1)
+
+    #First we get a starting value for ξ
+    m = Model( with_optimizer(KNITRO.Optimizer))
+    @variable(m, ξ[i=1:N])
+
+    @NLexpression( m, denom, 1 + sum( ξ[i] for i in 1:N))
+    @NLexpression( m, tot[i=1:N], ξ[i] / denom )
+
+    @NLobjective( m, Min, sum( tot[i]*tot[i] for i in 1:N))
+    optimize!(m)
+
+
+    @NLobjective( m, Min, sum(((ξ[i] / ( 1.0 + sum( ξ[j] for j in 1:nPeople))) - Y[i])*((ξ[i] / ( 1.0 + sum( ξ[j] for j in 1:nPeople))) - Y[i]) for i in 1:nPeople ) )
+    optimize!(m)
+
+    startVal = Vector{Float64}(undef,N)
+    for i in 1:N
+        startVal[i] = JuMP.value(ξ[i])
+            
+    end
+
+    
+    m = Model( with_optimizer(KNITRO.Optimizer))
+
+    @variable(m,  θ[n=1:2,k=1:coefs], start = 0 )
+    @variable(m, ξ[i=1:N] )
+    @variable(m, boldξ[i=1:N,z=1:nInst])
+
+    @NLexpression(m, δ[i=1:N],  sum(θ[1,k]*X[i,k] for k in 1:coefs))
+
+    @NLexpression(m, marketShareGood[i=1:N,j=1:nPeople],
+                  exp( δ[i] + sum( θ[2,k]*people[j,k]*X[i,k] for k in 1:coefs) + ξ[i]))
+
+    @NLexpression( m, denom[j=1:nPeople],
+                   ( 1 + sum( marketShareGood[l,j] for l in 1:N ) ) )
+
+    @NLconstraint( m, shares[i=1:N],
+                   Y[i] + log(nPeople) ==
+                   log( sum(marketShareGood[i,j] / denom[j] for j in 1:nPeople )) )
+    
+    @NLconstraint( m, boldStuff[i=1:N,z=1:nInst],
+                   boldξ[i,z] == ξ[i]*Z[i,z] )
+
+    @NLobjective( m, Min,
+                  sum( boldξ[i,q] * W[q,w] * boldξ[i,w] for q in 1:nInst,w in 1:nInst  ))
+
+    #exp(x) / (1 + exp(x)) = s
+
+    
+    for i in 1:N
+        set_start_value(ξ[i], startVal[i])
+        for z in 1:nInst
+            set_start_value(boldξ[i], startVal[i]*Z[i,z])
+        end
+    end
+    
+
+    optimize!(m)
+    
+
+    PZ = Z* ((Z'*Z) \ Z')
+
+    
+
+    β[r] = (X'*PZ*X) \ (X'*PZ*Y)
 end
 
 
-
+names(dat)[endCols]
