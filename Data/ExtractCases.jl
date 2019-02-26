@@ -37,7 +37,7 @@ function BuildCaseMatrix( Case::String, PlayerBase::DataFrame, AveragePlayers::F
     caseFile = "Cases/"*Case
     caseDemandFile = caseFile[1:(end-4)] * "_Demand.csv"
 
-    contents = DataFrame( CSV.File(contentFile,allowmissing=:none,header=[:Gun,:Skin,:Wear,:Prob]))
+    contents = DataFrame( CSV.File(contentFile,allowmissing=:none,header=[:Gun,:Skin,:Wear,:Prob,:rarity]))
 
     # sumCont = sum(contents[:,4])
     # for i in 1:size(contents,1)

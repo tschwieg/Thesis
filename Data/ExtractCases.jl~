@@ -189,10 +189,33 @@ for i in 1:length(Cases)
         BuildCaseMatrix(Cases[i], PlayerBase,AveragePlayers)
 end
 
+J = length(Cases)
 
-J = 22
 
-for i in 1:length(Cases)
+# for j in 1:J
+#     exVal = zeros(size(contentProbs[j],1))
+#     for i in 1:size(contentProbs[j],1)
+#         prev = 0.0
+#         for k in 1:size(contentProbs[j],2)
+#             prob = contentProbs[j][i,k] - prev
+#             #println(prob*contentPrices[j][i,k])
+#             exVal[i] += prob*contentPrices[j][i,k]
+#             prev += prob
+#         end
+#     end
+#     for k in 1:size(contentProbs[j],2)
+#         contentPrices[j][:,k] -= dataMat[j][:,1] .+ 2.5# + exVal
+#     end
+#     for i in 1:size(contentProbs[j],1)
+#         dataMat[j][i,7] = sum(contentPrices[j][i,:] .< 0.0)
+#     end
+# end
+
+
+
+
+
+for i in 1:J
     println( size( contentProbs[i]))
 end
 
