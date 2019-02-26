@@ -33,7 +33,7 @@ Cases = ["Chroma 2 Case.csv","Chroma 3 Case.csv","Chroma Case.csv","CS:GO Weapon
 
 
 function BuildCaseMatrix( Case::String, PlayerBase::DataFrame, AveragePlayers::Float64)
-    contentFile = "ModifiedKnives/"*Case
+    contentFile = "CaseContents/"*Case
     caseFile = "Cases/"*Case
     caseDemandFile = caseFile[1:(end-4)] * "_Demand.csv"
 
@@ -185,6 +185,7 @@ dataMat = Vector{Matrix{Float64}}(undef,length(Cases))
 contentProbs = Vector{Matrix{Float64}}(undef,length(Cases))
 contentPrices = Vector{Matrix{Float64}}(undef,length(Cases))
 for i in 1:length(Cases)
+    println(Cases[i])
     dataMat[i],contentProbs[i],contentPrices[i] =
         BuildCaseMatrix(Cases[i], PlayerBase,AveragePlayers)
 end
