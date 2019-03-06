@@ -12,6 +12,9 @@
 \usepackage{amsfonts}
 \usepackage{bbm}
 \usepackage{graphicx}
+\usepackage{tabularx,ragged2e,booktabs,caption}
+
+\renewcommand{\arraystretch}{1.2}
 
 \DeclareMathOperator{\diam}{diam}
 \DeclareMathOperator{\interior}{int}
@@ -277,17 +280,39 @@ value, between $0$ and $1$, which indicates the wear on the
 weapon. Wear does not change with use, and is determined when a weapon
 is un-boxed. This float is distributed uniformly, but based on its
 value, places the weapon into different brackets for sale. We will
-consider all weapons in a particular bracket as homogeneous.
-\begin{center}
-\begin{tabular}{|l|l|}\hline
-  Float & Condition\\\hline
-  0.00 - 0.07 & Factory New\\
-  0.07 - 0.15 & Minimal Wear\\
-  0.15 - 0.38 & Field-Tested\\
-  0.38 - 0.45 & Well-Worn\\
-  0.45 - 1.00 & Battle-Scarred\\\hline
+consider all weapons in a particular bracket as homogeneous. The
+contents of the crate are divided into several tiers based on their
+rarity from being obtained in a box. All of the statistics of a
+particular item that can be unboxed are summarized in the tables
+below.
+
+
+\begin{table*}[!htb]
+    \begin{minipage}{.5\linewidth}
+      \caption{Condition Probabilities}
+      \centering
+        \begin{tabular}{|l|l|}\hline
+          Float & Condition\\\hline
+          0.00 - 0.07 & Factory New\\
+          0.07 - 0.15 & Minimal Wear\\
+          0.15 - 0.38 & Field-Tested\\
+          0.38 - 0.45 & Well-Worn\\
+          0.45 - 1.00 & Battle-Scarred\\\hline
 \end{tabular}
-\end{center}
+    \end{minipage}%
+    \begin{minipage}{.5\linewidth}
+      \centering
+        \caption{Rarity Probabilities}
+        \begin{tabular}{|c|l|}\hline
+          Probability & Rarity\\\hline
+          .0026 & Special (Gold)\\
+          .0064 & Covert (Red)\\
+          .032 & Classified (Pink)\\
+          .1598 & Restricted (Purple)\\
+          .7992 & Mil-spec (Blue)\\\hline
+\end{tabular}
+    \end{minipage} 
+\end{table*}
 
 Independent of wear, each item
 also has a $10\%$ chance of being StatTrak\texttrademark, where the
@@ -295,58 +320,48 @@ gun includes a tracker that counts the number of kills a player has
 with this weapon. This number is reset on sale, so it can be treated
 simply as a binary indicator.
 
-The contents of the crate are divided into several tiers, based on
-their rarity from being obtained in a box. These tiers and their
-probability of being obtained are given below:
-
-\begin{center}
-\begin{tabular}{|c|l|}\hline
-Probability & Rarity\\\hline
-.0026 & Special (Gold)\\
-.0064 & Covert (Red)\\
-.032 & Classified (Pink)\\
-.1598 & Restricted (Purple)\\
-.7992 & Mil-spec (Blue)\\\hline
-\end{tabular}
-\end{center}
-
 However between lotteries there is substantial hetoegeneity in the
 amount of contents in each of these brackets. The largest amount of
 heterogeneity is in the Gold tier.  Several of these lotteries have in
-excess of a hundred possible contents, reaching a maximum of 236, most
-of which are in the gold tier. This leads to an extremely large amount
-of items with extremely low probabilities of being unboxed. This
-provides a distinction between two groups of lotteries, ones with many
-rare items, and the others where they are distributed evenly among the
+excess of a hundred possible contents, reaching a maximum of 228 items
+in the gold tier. This leads to an extremely large amount of items
+with extremely low probabilities of being unboxed. This provides a
+distinction between two groups of lotteries, ones with many rare
+items, and the others where they are distributed evenly among the
 brackets.
 
-\begin{centering}
-\begin{tabular}{|l|c|c|c|c|c|c|c|}\hline
-  Case & $\mathbb{E}[V]$ & Price & \#Blue & \#Purple & \#Pink & \#Red & \#Gold\\\hline
-Operation Wildfire Case & 0.89891 & 2.5307 & 26 & 18 & 14 & 9 & 50\\
-Operation Breakout Weapon Case & 0.77011 & 2.5305 & 24 & 15 & 12 & 10 & 56\\
-Falchion Case & 0.95072 & 2.5323 & 27 & 24 & 11 & 9 & 59\\
-Shadow Case & 0.85299 & 2.5349 & 29 & 17 & 14 & 10 & 59\\
-Huntsman Weapon Case & 0.95531 & 3.3181 & 25 & 17 & 12 & 8 & 62\\
-Spectrum Case & 0.98146 & 2.53 & 34 & 23 & 15 & 9 & 68\\
-Chroma 2 Case & 1.0058 & 2.53 & 25 & 13 & 13 & 9 & 81\\
-Chroma 3 Case & 0.66099 & 2.53 & 30 & 19 & 11 & 10 & 81\\
-Chroma Case & 0.83215 & 2.55 & 23 & 20 & 10 & 4 & 81\\
-Glove Case & 0.84301 & 2.53 & 27 & 26 & 9 & 12 & 89\\
-Operation Hydra Case & 1.5465 & 4.0827 & 25 & 20 & 14 & 9 & 89\\\hline
-Gamma 2 Case & 0.68335 & 2.53 & 31 & 22 & 13 & 7 & 128\\
-Gamma Case & 0.80717 & 2.53 & 31 & 21 & 11 & 10 & 128\\
-CS:GO Weapon Case & 4.4611 & 9.3248 & 7 & 6 & 7 & 2 & 228\\
-eSports 2013 Case & 3.2708 & 10.354 & 8 & 13 & 7 & 2 & 228\\
-eSports 2013 Winter Case & 1.5687 & 2.6441 & 18 & 9 & 11 & 3 & 228\\
-eSports 2014 Summer Case & 1.4136 & 2.7414 & 21 & 19 & 16 & 9 & 228\\
-Operation Bravo Case & 4.3567 & 12.628 & 26 & 15 & 9 & 6 & 228\\
-Operation Phoenix Weapon Case & 0.85507 & 2.5416 & 15 & 12 & 9 & 7 & 228\\
-Operation Vanguard Weapon Case & 1.038 & 2.5928 & 17 & 13 & 12 & 10 & 228\\
-Revolver Case & 1.1045 & 2.53 & 24 & 25 & 12 & 9 & 228\\
-Winter Offensive Weapon Case & 1.299 & 3.5079 & 14 & 14 & 12 & 6 & 228\\\hline
-\end{tabular}
-\end{centering}
+\begin{minipage}{\linewidth}
+  \centering
+  \captionof{table}{Lottery Details}
+  \begin{tabular}{@{}lcccccccc@{}}\toprule
+    & \multicolumn{2}{c}{Values} & &\multicolumn{5}{c}{Number of Contents}\\
+    \cmidrule{2-3} \cmidrule{5-9}
+  Case & $\mathbb{E}[V]$ & Price &\quad& \#Blue & \#Purple & \#Pink & \#Red & \#Gold\\\midrule
+Operation Wildfire  & 0.89891 & 2.5307 &\quad& 26 & 18 & 14 & 9 & 50\\
+Operation Breakout Weapon  & 0.77011 & 2.5305 &\quad& 24 & 15 & 12 & 10 & 56\\
+Falchion Case  & 0.95072 & 2.5323 &\quad& 27 & 24 & 11 & 9 & 59\\
+Shadow Case  & 0.85299 & 2.5349 &\quad& 29 & 17 & 14 & 10 & 59\\
+Huntsman Weapon Case  & 0.95531 & 3.3181 &\quad& 25 & 17 & 12 & 8 & 62\\
+Spectrum Case  & 0.98146 & 2.53 &\quad& 34 & 23 & 15 & 9 & 68\\
+Chroma 2 Case  & 1.0058 & 2.53 &\quad& 25 & 13 & 13 & 9 & 81\\
+Chroma 3 Case  & 0.66099 & 2.53 &\quad& 30 & 19 & 11 & 10 & 81\\
+Chroma Case  & 0.83215 & 2.55 &\quad& 23 & 20 & 10 & 4 & 81\\
+Glove Case  & 0.84301 & 2.53 &\quad& 27 & 26 & 9 & 12 & 89\\
+Operation Hydra  & 1.5465 & 4.0827 &\quad& 25 & 20 & 14 & 9 & 89\\
+Gamma 2 Case  & 0.68335 & 2.53 &\quad& 31 & 22 & 13 & 7 & 128\\
+Gamma Case & 0.80717 & 2.53 &\quad& 31 & 21 & 11 & 10 & 128\\\hline
+CS:GO Weapon  & 4.4611 & 9.3248 &\quad& 7 & 6 & 7 & 2 & 228\\
+eSports 2013 Case  & 3.2708 & 10.354 &\quad& 8 & 13 & 7 & 2 & 228\\
+eSports 2013 Winter Case  & 1.5687 & 2.6441 &\quad& 18 & 9 & 11 & 3 & 228\\
+eSports 2014 Summer Case  & 1.4136 & 2.7414 &\quad& 21 & 19 & 16 & 9 & 228\\
+Operation Bravo  & 4.3567 & 12.628 &\quad& 26 & 15 & 9 & 6 & 228\\
+Operation Phoenix Weapon  & 0.85507 & 2.5416 &\quad& 15 & 12 & 9 & 7 & 228\\
+Operation Vanguard Weapon  & 1.038 & 2.5928 &\quad& 17 & 13 & 12 & 10 & 228\\
+Revolver Case  & 1.1045 & 2.53 &\quad& 24 & 25 & 12 & 9 & 228\\
+Winter Offensive Weapon  & 1.299 & 3.5079 &\quad& 14 & 14 & 12 & 6 & 228\\\bottomrule
+  \end{tabular}
+  
+\end{minipage}
 
 \section{Model}
 
