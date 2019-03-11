@@ -1,0 +1,95 @@
+The question of the optimal mechanism for a monopolist selling
+multiple differentiated but related products is a very complicated
+question. In this paper I hope to shed light on a question of whether
+a class of behavioral models, cumulative prospect theory, is helpful
+in considering mechanisms that utilize randomness. I use field data
+from a collection of markets for lotteries as well as secondary
+markets for each of their contents to determine valuations, and build
+a model of risk preferences from this. I seek to answer the question
+of whether or not this model provides additional predictive and
+explanatory power in examining behavior of individuals buying
+lotteries. I aim to analyze which components of this model of behavior
+are most important in these lotteries being valued so much above their
+expected value. 
+
+In essence, I have a field experiment and wish to determine from this
+data whether or not cumulative prospect theory can explain
+individual's behavior better than traditional "rational" models of
+consumer behavior. This is an ideal setting for such a project as
+these lotteries combine many elements that behavioral economists would
+term "irrational". These lotteries feature many high value but
+extremely low (order of $10^{-5}^{}$) probability outcomes, the potential
+market is mainly teenagers, and the cost of participation is low
+(\$2.50-4.00). In such a setting, one would expect a large gain from
+predictive power employing a behavioral model of risk. 
+
+
+
+There is relatively little literature in field and Industrial
+Organization applying cumulative prospect theory, and I aim to show
+that  
+
+Exclusivity
+
+One often-made assumption for tractibility is that consumers draw an
+iid valuation from some distribution
+
+We take the extreme on our assumption of the valuation, and assume
+that there is a common-value to all consumers of the item. However the
+common value is not static, as valuations are driven by unobserved
+factors such as "coolness" and relative scarcity of the item in the
+market. These two elements are changing over time, so the demand for
+the item shifts, but the price that the item is being sold reflects
+the valuation for that item at the current time period. 
+
+Dynamics
+
+Each of the contents of the box do not have any intrinsic value in a
+non-economic sense. They are purely cosmetic alterations, and thus
+are affected on a large magnitude by other consumer's choices and
+preferences as well as their consideration set and other alternatives
+that cannot be estimated. Their demand is also driven by the
+equilibrium strategy within the game, that is non-stable. All of these
+lead to problems in estimation of valuations over time. To reduce
+the error arising from these dynamic problems in a static-demand
+estimation problem, I intend to use data from a relatively small time
+period where all factors are constant. 
+
+In each time period, since a continuous double auction is converging
+quickly to a competitive equilibrium, I assume equilibrium. However
+the equilibrium is extremely strong in the sense that I do not allow
+for strategies where individuals retain their lotteries without
+opening. Markets are assumed to be efficient, and individuals
+homogeneous, so no individual can not have information about a price
+change that is not reflected in the market. 
+
+This in essence rules out cases of market manipulation occurring, and
+within a single good I found evidence of the price being artificially
+raised in the time period studied, while other variants of it remained
+constant. This item was removed from study in order to avoid
+complications that can arise from this sort of dynamic behavior. 
+
+
+Big Picture
+- Introduction
+- Data
+-- Why is this data set a good thing to look at
+-- Uniqueness of many very rare high value items
+- Theory
+
+-- Berry 1994
+-- CPT
+-- Heterogeneity?
+- Estimation
+- Results
+-- Estimation of CPT
+-- Estimation of VNM
+--- Comparison of them out-of-sample (different lotteries/same
+           lotteries different times)
+-- Structural Differences? Implications to calibration
+
+- Conclusions
+
+
+One important question to investigate is one of the stability of these
+parameters 

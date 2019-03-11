@@ -309,4 +309,3 @@ for i in 1:J
         dataMat[i][t,5] = log(outsideOption )
     end
 end
-
