@@ -221,6 +221,58 @@ for i in 1:J
 end
 
 T = Vector{Int64}(undef,J)
+for j in 1:J
+    T[j] = size(contentPrices[j],1)
+end
+
+
+
+
+
+
+
+
+
+
+trueProbs = Vector{Matrix{Float64}}(undef,J)
+truePrices = Vector{Matrix{Float64}}(undef,J)
+casePrices = Vector{Vector{Float64}}(undef,J)
+for j in 1:J
+    trueProbs[j] = copy(contentProbs[j])
+    truePrices[j] = copy(contentPrices[j])
+    #println(j)
+   # println("\n\n")
+    for t in 1:size(contentProbs[j],1)
+        #println(t)
+        trueProbs[j][t,:] = vcat( [copy(trueProbs[j][t,i]) - copy(trueProbs[j][t,i-1]) for i in length(trueProbs[j][t,:]):-1:2], copy(trueProbs[j][t,1]))[end:-1:1]
+        truePrices[j][t,:] = contentPrices[j][t,:] .+ 2.50 .+ dataMat[j][t,1]
+    end
+end
+
+exVals = Vector{Matrix{Float64}}(undef,22)
+exVal = Vector{Vector{Float64}}(undef,22)
+for j in 1:J
+    exVals[j] = copy(trueProbs[j])
+    exVal[j] = zeros(T[j])
+    for t in 1:T[j]
+        exVals[j][t,:] = trueProbs[j][t,:] .* (contentPrices[j][t,:] .+ 2.50 .+ dataMat[j][t,1] )
+        exVal[j][t] = sum( exVals[j][t,i] for i in 1:size(exVals[j],2))
+    end    
+end
+
+for j in 1:J
+    for t in 1:size(contentProbs[j],1)
+        contentPrices[j][t,:] = contentPrices[j][t,:] .- exVal[j][t]
+        dataMat[j][t,7] = sum(contentPrices[j][t,:] .< 0.0)
+    end
+end
+
+
+
+
+
+
+
 T .= 31
 
 for j in 1:J
@@ -257,5 +309,4 @@ for i in 1:J
         dataMat[i][t,5] = log(outsideOption )
     end
 end
-
 
