@@ -288,3 +288,56 @@ plot!( cdfs[4] )
 plot!( cdfs[5] )
 
 plot!( vals ./ maximum(vals))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Here I actually generate some plots
+
+tot = sum( T[j] for j in 1:22)
+
+exValVec = zeros(tot,4)
+counter = 1
+for j in 1:J
+    for t in 1:T[j]
+        global counter
+        exValVec[counter,1] = exVal[j][t]
+        exValVec[counter,2] = dataMat[j][t,1] + 2.50
+        exValVec[counter,3] = size(contentProbs[j],2)
+        exValVec[counter,4] = j
+        counter += 1
+    end
+end
+
+scatter( exValVec[:,2], exValVec[:,1], zcolor = exValVec[:,3],
+         label="Lotteries", xlabel="Price", ylabel="\$\\mathbb{E} V\$",
+         zlabel="Contents", markeralpha=1.0)
+plot!( 2.5:0.01:7.5, 2.5:0.01:7.5, label="Break-Even" )
+savefig( "../Plots/BreakEvenScatter.pdf")
+
+Losses = exValVec[:,2] - exValVec[:,1]
+plot(  ylims=(0.0,10.0), xlims=(110.0,500.0), title="Contents vs Losses",
+       ylabel="Losses", xlabel="# Contents" )
+for j in 1:J
+    plotme = exValVec[:,4] .== j
+    scatter!( exValVec[plotme,3], Losses[plotme], label = Cases[j][1:end-4], show=true, markershape=:x, markeralpha=.2)
+end
+savefig( "../Plots/LossesVSizeNoLegend.png")
+

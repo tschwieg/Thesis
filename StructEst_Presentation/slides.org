@@ -1,11 +1,11 @@
 #+STARTUP: beamer 
 #+LATEX_CLASS: beamer
 #+BEAMER_THEME: Montpellier
-#+LaTeX_CLASS_OPTIONS: [bigger]
 #+OPTIONS: H:2 toc:nil
 #+toc: nil
-#+TITLE: The benefits of Randomization Mechanisms in Counter-Strike: Global Offensive
+#+TITLE: The Longshot bias in market data: Evidence from Counter-Strike: Global Offensive
 #+AUTHOR: Timothy Schwieg
+#+LATEX_HEADER: \usepackage{tabularx,ragged2e,booktabs,caption}
 #+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
 
 
@@ -42,6 +42,69 @@
   of March 31^st 2018.
 - Number of active players per day and unique twitch viewers per day
 
+
+** Pictures
+[[../Plots/BreakEvenScatter.pdf]]
+
+** Does Size Matter?
+
+[[../Plots/LossesVSize.pdf]]
+
+** Lotteries
+
+#+BEGIN_EXPORT latex
+\begin{minipage}{\linewidth}
+  \centering
+  \resizebox{\columnwidth}{!}{%
+  \begin{tabular}{@{}lcccccccc@{}}\toprule
+    & \multicolumn{2}{c}{Values} & &\multicolumn{5}{c}{Number of Contents}\\
+    \cmidrule{2-3} \cmidrule{5-9}
+  Case & $\mathbb{E}[V]$ & Price &\quad& \#Blue & \#Purple & \#Pink & \#Red & \#Gold\\\midrule
+Operation Wildfire  & 0.89891 & 2.5307 &\quad& 26 & 18 & 14 & 9 & 50\\
+Operation Breakout  & 0.77011 & 2.5305 &\quad& 24 & 15 & 12 & 10 & 56\\
+Falchion Case  & 0.95072 & 2.5323 &\quad& 27 & 24 & 11 & 9 & 59\\
+Shadow Case  & 0.85299 & 2.5349 &\quad& 29 & 17 & 14 & 10 & 59\\
+Huntsman Weapon Case  & 0.95531 & 3.3181 &\quad& 25 & 17 & 12 & 8 & 62\\
+Spectrum Case  & 0.98146 & 2.53 &\quad& 34 & 23 & 15 & 9 & 68\\
+Chroma 2 Case  & 1.0058 & 2.53 &\quad& 25 & 13 & 13 & 9 & 81\\
+Chroma 3 Case  & 0.66099 & 2.53 &\quad& 30 & 19 & 11 & 10 & 81\\
+Chroma Case  & 0.83215 & 2.55 &\quad& 23 & 20 & 10 & 4 & 81\\
+Glove Case  & 0.84301 & 2.53 &\quad& 27 & 26 & 9 & 12 & 89\\
+Operation Hydra  & 1.5465 & 4.0827 &\quad& 25 & 20 & 14 & 9 & 89\\
+Gamma 2 Case  & 0.68335 & 2.53 &\quad& 31 & 22 & 13 & 7 & 128\\
+Gamma Case & 0.80717 & 2.53 &\quad& 31 & 21 & 11 & 10 & 128\\\bottomrule
+  \end{tabular}%
+}
+  
+\end{minipage}
+
+#+END_EXPORT
+
+
+** High  Content Lotteries
+#+BEGIN_EXPORT latex
+\begin{minipage}{\linewidth}
+  \centering
+  \resizebox{\columnwidth}{!}{%
+  \begin{tabular}{@{}lcccccccc@{}}\toprule
+    & \multicolumn{2}{c}{Values} & &\multicolumn{5}{c}{Number of Contents}\\
+    \cmidrule{2-3} \cmidrule{5-9}
+  Case & $\mathbb{E}[V]$ & Price &\quad& \#Blue & \#Purple & \#Pink & \#Red & \#Gold\\\midrule
+CS:GO Weapon  & 4.4611 & 9.3248 &\quad& 7 & 6 & 7 & 2 & 228\\
+eSports 2013 Case  & 3.2708 & 10.354 &\quad& 8 & 13 & 7 & 2 & 228\\
+eSports 2013 Winter  & 1.5687 & 2.6441 &\quad& 18 & 9 & 11 & 3 & 228\\
+eSports 2014 Summer  & 1.4136 & 2.7414 &\quad& 21 & 19 & 16 & 9 & 228\\
+Operation Bravo  & 4.3567 & 12.628 &\quad& 26 & 15 & 9 & 6 & 228\\
+Operation Phoenix  & 0.85507 & 2.5416 &\quad& 15 & 12 & 9 & 7 & 228\\
+Operation Vanguard  & 1.038 & 2.5928 &\quad& 17 & 13 & 12 & 10 & 228\\
+Revolver Case  & 1.1045 & 2.53 &\quad& 24 & 25 & 12 & 9 & 228\\
+Winter Offensive  & 1.299 & 3.5079 &\quad& 14 & 14 & 12 & 6 & 228\\\bottomrule
+  \end{tabular}%
+}
+  
+\end{minipage}
+
+#+END_EXPORT
 * Model
 
 ** Discrete Choice - Berry (1994)
@@ -65,25 +128,64 @@ utility:
   \log s_{jt} - \log s_{0t} = V(x_{jt}, p_{jt}; \theta) + \xi_{jt}
 \end{equation*}
 
+** Implications
+- Differentiated Goods
+- Prediction based on market shares
+- Homogeneous Consumers - Is this reasonable?
+- No structure placed on $\xi$
+
 
 
 ** Cumulative Prospect Theory
 - Four main components: Reference dependence, loss aversion,
   diminishing sensitivity, and probability weighting
+
+- Diminishing sensitivity and loss aversion are summarized by the
+  valuation function for each content of the lottery. 
+- $x$ is not the content of the lottery, but the value of the gain or
+  loss of that content relative to some reference point.
 #+BEGIN_EXPORT latex
 \begin{align*}
-  \Pi_{s_i} &= \sum_{j=1}^{s_i} \pi_{s_j}\\
   v(x) &=
   \begin{cases}
     x^\alpha \quad &x \geq 0\\
     -\lambda(-x)^\alpha \quad &x < 0
   \end{cases}\\
-  w(P) &= \frac{ P^\delta }{( P^\delta + (1-P)^\delta )^{\frac{1}{\delta}}}\\
-  \\
-  F(x_i) &= \brak{w( \Pi_{s_i}) - w(\Pi_{s_i - 1}) } v( x_i - p_j - 2.50)
 \end{align*}
 #+END_EXPORT
 
+** Reference dependence and Loss Aversion
+- What is the proper reference point?
+- Can it be estimated?
+- How is loss aversion tied to the reference point?
+ 
+Picture
+
+** Probability Weighting Function
+#+BEGIN_EXPORT latex
+\begin{equation*}
+  w(p) = \frac{\gamma p^{\delta}}{\gamma p^{\delta} + (1-p)^{\delta}}
+\end{equation*}
+- This weight is applied to cumulative probabilities
+- Interpretations of $\gamma$ and $\delta$?
+
+Picture
+#+END_EXPORT
+
+** Valuation of a Lottery
+- The "viewed" probability of each person obtaining an item from the
+  lottery is
+#+BEGIN_EXPORT latex
+\begin{align*}
+  \Pi_{s_i} &= \sum_{j=1}^{s_i} \pi_{s_j}\\
+  p_i &= w( \Pi_{s_i}) - w(\Pi_{s_{i-1}})\\
+  F(x_i) &= \left[  w( \Pi_{s_i}) - w(\Pi_{s_i - 1}) \right] v( x_i - R)\\
+  \\
+  V &= \sum_{i=1} F(x_i)\\            
+\end{align*}
+#+END_EXPORT
+
+** Estimation Procedure
 
 
 ** Estimation
