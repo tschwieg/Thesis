@@ -341,3 +341,18 @@ for j in 1:J
 end
 savefig( "../Plots/LossesVSizeNoLegend.png")
 
+plot( x,x, label="True CDF", xlabel="Cumulative Probability", ylabel="Weighted Probability", title="Probability Weighting Function" )
+
+plot!( x, g.(x, 1.0, .5 ), label="\$\\gamma = 1.0\$\n\$\\delta = .5\$" )
+
+plot!( x, g.(x, 0.3, .5 ), label="\$\\gamma = 0.3\$\n\$\\delta = .5\$" )
+
+plot!( x, g.(x, 0.5, .25 ), label="\$\\gamma = 0.5\$\n\$\\delta = .25\$" )
+
+savefig("../Plots/WeightFun.pdf")
+
+plot( x, f.(x,.5,1.5), xlabel="\\\$ Value", ylabel="Valuation", label="\$\\alpha = .5\$\n\$\\lambda = 1.5\$", title = "Diminishing Sensitivity and Loss Aversion" )
+
+plot!( x, f.(x,.35,2.5), xlabel="\\\$ Value", ylabel="Valuation", label="\$\\alpha = .35\$\n\$\\lambda = 2.5\$" )
+
+savefig( "../Plots/ValueFunction.pdf" )
