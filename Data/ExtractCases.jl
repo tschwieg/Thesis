@@ -34,7 +34,9 @@ Cases = ["Chroma 2 Case.csv","Chroma 3 Case.csv","Chroma Case.csv","CS:GO Weapon
 
 function BuildCaseMatrix( Case::String, PlayerBase::DataFrame, AveragePlayers::Float64)
     contentFile = "CaseContents/"*Case
+    #caseFile = "OutSampleCases/"*Case
     caseFile = "Cases/"*Case
+
     caseDemandFile = caseFile[1:(end-4)] * "_Demand.csv"
 
     contents = DataFrame( CSV.File(contentFile,allowmissing=:none,header=[:Gun,:Skin,:Wear,:Prob,:rarity]))
@@ -56,8 +58,10 @@ function BuildCaseMatrix( Case::String, PlayerBase::DataFrame, AveragePlayers::F
     fmt = @dateformat_str("u d y H")
 
     for i in 1:size(contents,1)
+        #"OutSampleData/"
         filename = "Data/" * contents[i,:Gun] * "/" * contents[i,:Skin] * "/" *
             contents[i,:Wear] * ".csv"
+        #println(i)
         weaponData[i] = DataFrame( CSV.File( filename, allowmissing=:none,header=[:Date,:Price,:Quantity]))
         weaponData[i][:Date] = [DateTime( weaponData[i][j,1][1:14], fmt ) for j in 1:size(weaponData[i],1)]
         
@@ -78,7 +82,11 @@ function BuildCaseMatrix( Case::String, PlayerBase::DataFrame, AveragePlayers::F
     #throwoutDate = dt.strptime("Feb 28 2018 01: +0", "%b %d %Y %H: +0")
     throwoutDate = DateTime( "Feb 28 2018 01", fmt)
 
+    #throwoutDateStart = DateTime( "Jun 1 2017 01", fmt)
+    #throwoutDateEnd = DateTime( "Jul 28 2017 01", fmt)
+
     validRows = caseData[:Date] .>= throwoutDate
+        #(caseData[:Date] .>= throwoutDateStart ) .*  (caseData[:Date] .<= throwoutDateEnd)
 
     temp = unique(Dates.yearmonthday.(caseData[validRows,1]))
     
@@ -260,20 +268,21 @@ for j in 1:J
     end    
 end
 
-for j in 1:J
-    for t in 1:size(contentProbs[j],1)
-        contentPrices[j][t,:] = contentPrices[j][t,:] .- exVal[j][t]
-        dataMat[j][t,7] = sum(contentPrices[j][t,:] .< 0.0)
-    end
-end
+# for j in 1:J
+#     for t in 1:size(contentProbs[j],1)
+#         contentPrices[j][t,:] = contentPrices[j][t,:] .- exVal[j][t]
+#         dataMat[j][t,7] = sum(contentPrices[j][t,:] .< 0.0)
+#     end
+# end
 
 
 
 
 
+#throwoutDateStart = DateTime( "Jun 1 2017 01", fmt)
+#throwoutDateEnd = DateTime( "Jul 28 2017 01", fmt)
 
-
-T .= 31
+T .= 31#58#31
 
 for j in 1:J
     for i in 1:size(contentProbs[j],1)
