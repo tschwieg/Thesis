@@ -277,12 +277,8 @@ end
 
 
 
+T .= 31
 
-
-#throwoutDateStart = DateTime( "Jun 1 2017 01", fmt)
-#throwoutDateEnd = DateTime( "Jul 28 2017 01", fmt)
-
-T .= 31#58#31
 
 for j in 1:J
     for i in 1:size(contentProbs[j],1)
