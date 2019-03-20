@@ -694,3 +694,16 @@ stdErrors = [sqrt(varEst[i,i]) for i in 1:size(varEst,1)]
 
 
 # W = inv((1.0/tot)*slate)
+
+
+
+
+
+
+
+
+
+
+
+
+

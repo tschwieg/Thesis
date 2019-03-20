@@ -341,13 +341,36 @@ for j in 1:J
 end
 savefig( "../Plots/LossesVSizeNoLegend.png")
 
-plot( x,x, label="True CDF", xlabel="Cumulative Probability", ylabel="Weighted Probability", title="Probability Weighting Function" )
+
+function g( x::Real, gamma::Float64, delta::Float64)
+    return gamma*x^delta / ( gamma*x^delta + (1-x)^delta  )
+end
+
+firstFunc = x -> g( x, 1.0, .5 )
+
+deriv = (x,y,z) -> ForwardDiff.derivative( x -> g( x, y, z ), x)
+
+x = 0:.0001:1.0
+
+p1 = plot( x, x , label="True CDF", xlabel="Cumulative Probability", ylabel="Weighted Probability", title="Probability Weighting Function" )
 
 plot!( x, g.(x, 1.0, .5 ), label="\$\\gamma = 1.0\$\n\$\\delta = .5\$" )
 
 plot!( x, g.(x, 0.3, .5 ), label="\$\\gamma = 0.3\$\n\$\\delta = .5\$" )
 
 plot!( x, g.(x, 0.5, .25 ), label="\$\\gamma = 0.5\$\n\$\\delta = .25\$" )
+
+
+p2 = plot( x, ones(length(x)) , label="True PDF", xlabel="Cumulative Probability", ylabel="Weighted Density", title="Tail of Density Function",
+           xlims = (.99,1.0))#ylims= (0.0,10.0) )
+
+plot!( x, deriv.(x, 1.0, .5 ), label="\$\\gamma = 1.0\$\n\$\\delta = .5\$" )
+
+plot!( x, deriv.(x, 0.3, .5 ), label="\$\\gamma = 0.3\$\n\$\\delta = .5\$" )
+
+plot!( x, deriv.(x, 0.5, .25 ), label="\$\\gamma = 0.5\$\n\$\\delta = .25\$" )
+
+plot( p1, p2, layout=(2,1))
 
 savefig("../Plots/WeightFun.pdf")
 

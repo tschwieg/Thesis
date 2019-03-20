@@ -68,28 +68,60 @@
 
 \bibliographystyle{chicago}
 
-\title{Lessons from Behavioral Economics: Cumulative Prospect Theory
-  Applied to Online Lotteries}
+\title{The Longshot bias in market data: Evidence from Counter-Strike:
+  Global Offensive}
 \author{Timothy Schwieg}
 
+\renewcommand\maketitle{}
 \begin{document}
 
 \maketitle
+\bibliographystyle{chicago}
 
-\section{Research Question}
+\begin{titlepage}
+\centering
+{\scshape\LARGE University of Chicago\par}
+\vspace{1cm}
+{\scshape\Large MACS 40200\par}
+\vspace{1.5cm}
+{\huge\bfseries The Longshot bias in market data: Evidence from Counter-Strike:
+  Global Offensive\par}
+\vspace{2cm}
+{\Large\itshape Timothy Schwieg\par}
+\vfill
+\justify
+In this paper I investigate whether or not behavioral models of
+behavior under uncertainty explain market level sales of
+lotteries. I extend a homogeneous model of logit demand in the a
+characteristic space to several functional forms of the valuation
+function for a lottery. The data come from online sales of lotteries
+in a complete market for video game cosmetics. These lotteries contain
+many low probability and high value contents. I find that the
+behavioral model of cumulative prospect theory does no better at
+explaining variation in the market shares than a rational model. I
+find that the rational model does do better at describing equilibrium
+between the prices of the contents and the prices of the lotteries
+that contain these contents. 
+\vfill
+\centering
+{\large \today\par}
+\end{titlepage}
 
-Many structural models for individuals behavior have become unpopular
-among economists because of strict assumptions of rationality on
-behavior. In this paper I examine a relaxation of this behavior and
+
+\section{Introduction}
+
+Many structural models for individuals behavior have lost popularity
+among applied economists because of strict assumptions of rationality
+on behavior. In this paper I examine a relaxation of this behavior and
 investigate whether or not it can be used to explain behavior better
 than other rational models.  I hope to shed light on a question of
 whether a class of behavioral models, cumulative prospect theory, is
-helpful in considering mechanisms that utilize randomness. I use field
-data from a collection of markets for lotteries as well as secondary
-markets for each of their contents to determine valuations, and build
-a model of risk preferences from this. I seek to answer the question
-of whether or not this model provides additional predictive and
-explanatory power in examining behavior of individuals buying
+helpful in considering selling mechanisms that utilize randomness. I
+use field data from a collection of markets for lotteries as well as
+secondary markets for each of their contents to determine valuations,
+and build a model of risk preferences from this. I seek to answer the
+question of whether or not this model provides additional predictive
+and explanatory power in examining behavior of individuals buying
 lotteries. I aim to analyze which components of this model of behavior
 are most important in these lotteries being valued so much above their
 expected value.
@@ -122,6 +154,28 @@ be some notion of robustness of the parameter estimates, and I intend
 to investigate whether or not these parameters are dependent on the
 structure of the lottery, or are primitives in the purest sense. 
 
+This question is relevant to the larger field of Industrial
+Organization because it is able to bring the question of preference
+heterogeneity previously studied by \cite{Snowberg2010} among others
+in horse betting. We are able to abstract ourselves from the concerns
+of belief heterogeneity suggested by \cite{Gandhi2014} due to the
+specific structure of the market, and thus are able to isolate the
+effects of only preferences. I extend this notion to market
+data. Previously the literature had been focuses on contracts, whether
+in betting markets or in financial markets.
+
+While the data is focused on sales in online markets for video game
+items. This type of mechanism is not limited to this market
+only. Randomization mechanisms are popular ways of selling collectible
+items and trading cards in both virtual and actual markets. This same
+type of mechanism is also present in less-fringe markets such as
+children cereal collectibles and toys in fast-food kids meals. Each of
+these markets attempts to exploit the ``irrationality'' of children's
+behavior under uncertainty. We attempt to study this focusing on
+market data where valuations for each of the contents as well as the
+lottery are represented from a market. However these results can be
+extended to any type of market where randomization is the primary
+selling mechanism. 
 
 
 \section{Literature Review}
@@ -152,8 +206,13 @@ process. Thus ``identification'' in the reduced-form sense of
 interpretation of the parameters become much more possible, as there
 are many dimensions of the model.
 
-While most of the literature has been focused on the experimental
-setting, or high level financial decision making such as \cite*{Thaler1995}.
+The work on the application of Cumulative Prospect Theory within
+industrial organization has been limited, likely due to poor data. One
+area where the data has been rich has been horse betting, and
+\cite{Snowberg2010} applies cumulative prospect theory in a
+non-parametric setting to this data to explain the long-shot bias
+present there. There are also lots of applications in financial
+markets where there is better data, one such example is \cite*{Thaler1995}.
 \cite*{Sydnor2010} presents an application of prospect theory to real-world
 data. He uses data on homeowner's choices on deductibles for
 home-insurance policies as a measure of moderate financial risks. The
@@ -177,11 +236,13 @@ United States.
 
 This paper builds on some literature in the Industrial Organization
 Field that is based around applying behavioral models to structural
-estimation. Bajari and Hortacsu examine whether or not traditional
+estimation. \cite*{BajariHortacsu2003} examine whether or not traditional
 models of auction behavior can explain auction bidding behavior
 compared to adaptive models of learning and quantal response
 equilibrium. However, rather than examining experimental data to draw
-conclusions, I intend to use field data. 
+conclusions, I intend to use field data. \cite{Gandhi2014} examines
+the long shot bias in financial data again, but uses belief
+heterogeneity rather than preference heterogeneity. 
 
 The demand estimation framework that I intend to employ is the
 discrete-choice demand framework introduced by McFadden (1971). This
@@ -194,33 +255,23 @@ alleviates some of the theoretical problems that are created by the
 structure of the discrete choice estimation, namely independence of
 irrelevant alternatives. 
 
-Estimation of these models began with the strategy first suggested by
-\cite{BLP} commonly referred to as the Nested Fixed Point Algorithm,
-but has recently been superseded by the Mathematical Programming under
-Equality Constraints suggested by \cite*{MPEC}. This algorithm
-performs extremely well under sparse Hessian and gradients, of which
-my method contains many. This will allow for significantly easier
-estimation of the demand system.
-
-
 There is a focus on using Discrete choice models with prospect theory
 that has appeared in the Travel Behavior Literature. Such as
-Li,Hensher 2006 and De Palma, Picard, Waddell 2007 and Avineri and
-Prashker 2005. This literature, inspired by \cite*{dePalmaEtAl}, uses
-different behavioral models of individual behavior under lotteries
-directly in the utility specification of discrete choice. The paper
-discusses the different function forms and choices made by the
-researched in choosing the behavioral model to estimate choices.  The
-emphasis on the behavioral models, in particular De Palma, is on
-improving prediction rather than better explanatory power for the
-model. In particular, all of these exercises use simulated data or
-laboratory experiments to evaluate consumer's decision making, rather
-than estimating parameters from market choices that are
-observed. These problems manifest themselves in a lack of a measure of
-willingness to pay as well and reference point, making estimation of
-the parameters difficult when it is even attempted. Li also notes that
-the existing literature on transport fails to address individual
-specific heterogeneity as well.
+\cite{LiHensher2011} and \cite*{dePalma2007}. This literature,
+inspired by \cite*{dePalmaEtAl}, uses different behavioral models of
+individual behavior under lotteries directly in the utility
+specification of discrete choice. The paper discusses the different
+function forms and choices made by the researched in choosing the
+behavioral model to estimate choices.  The emphasis on the behavioral
+models, is on improving prediction rather than better explanatory
+power for the model. In particular, all of these exercises use
+simulated data or laboratory experiments to evaluate consumer's
+decision making, rather than estimating parameters from market choices
+that are observed. These problems manifest themselves in a lack of a
+measure of willingness to pay as well and reference point, making
+estimation of the parameters difficult when it is even attempted. This
+existing literature on transport fails to address individual specific
+heterogeneity as well.
 
 
 \section{Data}
@@ -283,6 +334,36 @@ data also contain active buy and sell orders at the time of its
 mining: (June $7^{th}$ 2018). No history for these buy and sell orders
 is available.
 
+From this data, the expected value of the lottery under various forms
+of utility functions can be calculated, as the prices of all of the
+contents are given in equilibrium with the prices of the lotteries
+themselves. A graph of the expected values against the prices of
+opening the lotteries is given below, using the number of contents of
+each of the lotteries as the temperature.
+
+\begin{center}
+\includegraphics[width=.9\linewidth]{../Plots/BreakEvenScatter.pdf}
+\end{center}
+
+Thisgraph demonstrates the clustered nature of these boxes, indicating
+that there is not a large amount of price variation overall. It also
+motivates the use of characteristic space models as the different
+lotteries appear to be quite clustered together with their own data
+points.
+
+
+This graph suggests that there may be a link between the size of the
+lottery and the number of losses, and this is investigated in the next
+graph.
+
+\begin{center}
+\includegraphics[width=.9\linewidth]{../Plots/LossesVSize.pdf}
+\end{center}
+
+Here we can see that although a large expected loss means that there
+are many contents of the lottery, the converse is not shown in the
+data. 
+
 \subsection{Characteristics}
 
 Since the model used will be in the characteristic space rather than
@@ -334,8 +415,8 @@ gun includes a tracker that counts the number of kills a player has
 with this weapon. This number is reset on sale, so it can be treated
 simply as a binary indicator.
 
-Conditioned on the rarirty, there are still many variants of the
-contents available, and there is substantial hetoegeneity in the
+Conditioned on the rarity, there are still many variants of the
+contents available, and there is substantial heterogeneity in the
 amount of contents in each of these brackets. The largest amount of
 heterogeneity is in the Gold tier.  Several of these lotteries have in
 excess of a hundred possible contents, reaching a maximum of 228 items
@@ -548,6 +629,12 @@ parameterization of these gains and losses be defined as:
 In this sense, $\alpha$ captures the risk-loving or risk-averse nature of
 the consumer, while $\lambda$ captures their level of loss-aversion.
 
+This valuation function for different levels of $\alpha,\lambda$ is shown below.
+
+\begin{center}
+\includegraphics[width=.75\linewidth]{../Plots/ValueFunction.pdf}
+\end{center}
+
 In cumulative prospect theory, the cumulative mass (distribution)
 function is weighted such that individuals overweight the tail
 probabilities. This is especially important in this model, as there are
@@ -571,6 +658,15 @@ levels of cumulative probability are treated. It can be viewed as how
 attractive a $50-50$ bet would be to a risk-neutral individual. It
 captures the elevation of the probability weighting function.
 
+A graph of different values of $\gamma,\delta$ and their affects on the
+different weighting is shown. 
+
+\begin{center}
+\includegraphics[width=.75\linewidth]{../Plots/WeightFun.pdf}
+\end{center}
+
+
+
 
 For some item that is within the contents of the box, a consumer's
 valuation is transformed by the function:
@@ -585,22 +681,63 @@ transformation for all of the contents of the lottery:
   V(x,\pi,p_j) = \sum_{i=1}^K F( x_i)
 \end{equation*}
 
-In this manner, this structure nests a the hyperbolic absolute risk
-aversion utility function of $U(X) = \sum p(x) x^{\alpha}$ often employed for
-its tractability. This corresponds to $\delta = 1, \lambda = 1$. In this sense,
-testing for these parameter values can be thought of as a test of
-whether or not there is any additional information gained through the
-application of the behavioral model for lottery valuations.
+\subsection{Constant Coefficient of Relative Risk Aversion}
+
+Contrasting the behavioral aspects of this procedure is the use of a
+Von-Neumann Morgenstern Utility function. However wealth level is not
+observed, so following with the trends in the IO literature, we use a
+Constant Coefficient of relative risk-aversion utility function to
+capture an element of risk-aversion or risk-loving in the
+individual.
+
+Continuing with the quasilinear utility observed above, the individual
+has utility of his current wealth if he elects not to buy the lottery,
+and if he chooses to buy lottery $j$, his utility is given by:
+\begin{equation*}
+  U_{ij} = W_i - \beta p_j + \sum_{k=1}^{N_j} p_k \frac{x_k^{1-\alpha}}{1-\alpha}
+\end{equation*}
+
+The use of the CRRA utility function allows the wealth of the
+individual to not be present in his valuation of the lottery, so that
+wealth only appears linearly in the utility function. As a result,
+when looking at the maximum between many lotteries, we can remove
+wealth from the equation. I posit that the utility of an individual
+that chooses lottery $j$ at time $t$ can be given by:
+
+\begin{equation*}
+  \sum_{k=1}^{N_j} p_k \frac{x_k^{1-\alpha}}{1-\alpha} - \beta p_{jt} + \xi_{jt} + \epsilon_{jt} 
+\end{equation*}
+
+Where $\epsilon_{jt}$ is a type-1 extreme value distribution, and $\xi_{jt}$
+are the unobserved characteristics of the lottery. Thus this model
+follows Berry (1994), but infers a different valuation function for the
+lottery using a CRRA utility function and subtracting some level of
+wealth. This allows for the same estimation strategy to be used for
+the rational case as the behavioral model. 
+
 
 
 \section{Estimation}
 
 \subsection{Estimation}
 
+In all formulations of the model, it can be written as:
+
 \begin{align*}
-  \xi_{jt} = \log s_{jt} - \log s_{0t} - V( x_{jt}, p_{jt}; \theta)
+  \xi_{jt} = \log s_{jt} - \log s_{0t} - \beta' C_j - V( x_{jt}, p_{jt}; \theta)
 \end{align*}
 
+Where $C_j$ are the observed characteristics of the lottery, $\xi_{jt}$
+are the unobserved characteristics of the model, $s$ are the market
+shares at a given time, and $\theta$ are the model parameters.
+
+Estimation of this model proceeds using the least-squares
+orthogonality conditions of $\exV{\xi_j Z_j} = 0$. Since I have made
+no distributional assumptions on $\xi_{jt}$ I shall conduct this
+estimation using the generalized method of moments. The matrix of
+$Z_j$ is constructed from the exogenous prices of the contents of the
+lotteries, but also from the price instruments, and the exogenous
+active buy order price terms. 
 
 Consider a matrix of exogenous variables $Z_j$ defined as above, we wish
 to estimate the parameters of $V$ based on the condition that this
@@ -617,55 +754,275 @@ The estimation procedure can be written as:
 
 \begin{align}
   &\min_{\bm{\xi}_{j,t}, \xi_{j,t}, \beta_0, \theta} \sum_{j,t}\bm{\xi}_{j,t}' \Omega \bm{\xi}_{j,t}\\
-  \text{subject to: } &\xi_{j,t} = \log s_{jt} - \log s_{0t} - \beta_0
+  \text{subject to: } &\xi_{j,t} = \log s_{jt} - \log s_{0t} - \beta'C_j
                         - V( x_{jt}, p_{jt}; \theta)\\
   &\bm{\xi}_{j,t} = \xi_{j,t} \bm{Z}_{j,t}  
 \end{align}
 
-Where $\beta_0$ is an estimated constant that incorporates the expected
-value of $\xi$ and the normalization utility of the outside option. We
-will not interpret it as meaningful Economically. For the weighting
-matrix $\Omega$, we follow the standard of using the two-stage
-least-squares weighting matrix $\inv{Z'Z}$. 
+Note that $C_j$ contains a constant term that incorporates the
+expected value of $\xi$ and the normalization utility of the outside
+option. We will not interpret it as meaningful Economically. For the
+weighting matrix $\Omega$, we follow the standard of using the two-stage
+least-squares weighting matrix $\inv{Z'Z}$. From this estimate, I
+construct the two-stage estimator of the ideal weighting matrix. The
+model is estimated again using the two-stage weighting matrix, and
+point estimates as well as estimates of the standard errors. 
+
+I examine four different variations of the behavioral model. I
+consider two different reference points, one of which is taken as
+simply the price that a consumer pays, where gains are taken as
+any return that is strictly above threshold, and losses below. The
+other reference point is taken to be the price plus the expected value
+of the loot box. This captures the notion that gains are not merely
+gaining money, but relative to the expectations of the individuals
+opening them. This notion cannot be made more precise with market
+data, but there is room for expanding it with more precise
+market-level data.
+
+The other variants of the model arise from the characteristic vector
+$C_j$, we examine the model when it only contains a single intercept,
+and when it contains a separate intercept for each of the different
+lotteries. This difference in the characteristics captures the
+different characteristics of the lotteries that may account for the
+heavy clustering present in the data. Since individual heterogeneity
+is not present in this model, a large characteristic space is not as
+computationally demanding as in the heterogeneous case.
+
+Estimation is done using the programming language Julia, using the
+software Julia for Mathematical Optimization. The Solver KNITRO is
+employed, and the model estimation for $\approx 1200$ data points took
+between four and eight hours for each specification. 
 
 
+\subsection{Results}
+The results for the four different variants of the cumulative prospect
+theory model and the CRRA model are displayed below. The measure of
+$\bar{R}^2$ used is $1 - \frac{\mathbb{V}(\xi)}{\mathbb{V}(Y)}$. This
+captures the percent of the variation of the model that we are able to
+explain. Standard errors are displayed in parenthesis.
 
+We compute both in-sample and out-of-sample RMSE to capture any
+notions of over-fitting, and report the J-statistic as well. The
+critical values for the J-statistic are as follows:
+Fixed Effects: 5\% 314.6784, 1\% 332.4796
+No Fixed Effects: 5\% 337.1254, 1\% 355.5251
 
 \begin{minipage}{\linewidth}
   \centering
-  \captionof{table}{Results}
+    \captionof{table}{Point Estimates}
+  \scalebox{1.0}{%
 \begin{tabular}{@{}cccccc@{}}\toprule
-  \multicolumn{3}{l}{$\exV{V}$ + Price Reference Point} & &\\
+  \multicolumn{3}{c}{$\exV{V}$ + Price Reference Point} & &\\
+\cmidrule{1-3}
 $\alpha$ & 0.56534 (2.03484) & $\lambda$ & 1.36844 (10.8477)\\
 $\gamma$ & 1.0 (6.36280) & $\delta$ & 1.0 (9.47887)\\
   In Sample RMSE & 1.23649 & Out Sample RMSE & 1.4337\\
   $\bar{R}^2$ & 0.18880 & J-Statistic & 825.185\\
   \midrule
- \multicolumn{3}{l}{$\exV{V}$ + Price Reference Point and Fixed
+ \multicolumn{3}{c}{$\exV{V}$ + Price Reference Point and Fixed
   Effects} & &\\
+\cmidrule{1-3}
 $\alpha$ & 0.79549 (4.6084) & $\lambda$ & 0.60091 (9.85376)\\
 $\gamma$ & 1.0 (9.79014) & $\delta$ & 1.0 (21.5814)\\
   In Sample RMSE & 1.08121 & Out Sample RMSE & 1.10642\\
   $\bar{R}^2$ & 0.51688 & J-Statistic & 558.41\\
   \midrule
-\multicolumn{3}{l}{Price Reference Point} & &\\
+\multicolumn{3}{c}{Price Reference Point} & &\\
+\cmidrule{1-3}
 $\alpha$ & 0.47457 (5.4068) & $\lambda$ & 0.54667 (14.56967)\\
 $\gamma$ & 1.0 (10.97014) & $\delta$ & 1.0 (10.85583)\\
   In Sample RMSE & 1.52584 & Out Sample RMSE & 1.5258\\
   $\bar{R}^2$ & 0.08117 & J-Statistic & 860.261\\
   \midrule
-\multicolumn{3}{l}{Price Reference Point and Fixed Effects} & &\\
+\multicolumn{3}{c}{Price Reference Point and Fixed Effects} & &\\
+\cmidrule{1-3}
 $\alpha$ & 0.8215 (7.6682) & $\lambda$ & 0.3152 (7.3252)\\
 $\gamma$ & 1.0 (7.6753) & $\delta$ & 1.0 (15.7306)\\
   In Sample RMSE & 1.01432 & Out Sample RMSE & 1.07900\\
   $\bar{R}^2$ & 0.54053 & J-Statistic & 351.73\\
   \midrule
-\multicolumn{3}{l}{Rational - CRRA} & &\\
-$\alpha$ & 0.17411 ( 6093.657) & $\beta$ & -0.32488 (0.28937)\\
+\multicolumn{3}{c}{Rational - CRRA} & &\\
+\cmidrule{1-3}
+$\alpha$ & 0.82589 ( 6093.657) & $\beta$ & -0.32488 (0.28937)\\
   In Sample RMSE & 0.98513 & Out Sample RMSE & 1.10097\\
   $\bar{R}^2$ & 0.52163 & J-Statistic & 570.394\\\bottomrule
 \end{tabular}
+}
 \end{minipage}
+
+\vspace{.2in}
+
+We reject the Null that the model is correctly specified in all cases,
+though the fixed effect does come close. Although this is not
+troubling as the mode is incredibly over-identified, it suggests that
+there is variation in the prices that the consumers are not sensitive
+to under these specifications. This suggests that a more
+non-parametric approach may be able to better explain variations in
+the data. At the very least, there is some misspecification in the
+models employed.
+
+We can see that there is relatively little of the variation in the
+quantities explained by simply the valuations, and without fixed
+effects we have a very small $\bar{R}^2$ level for the cumulative
+prospect theory. This may indicate that the prices that individuals
+are sensitive to may not be the last posted price, but some other
+notion of price, possibly smoothed over time. Further work on this
+topic should focus on this aspect, as well as relaxing the
+assumptions of homogeneity for a more complex model.
+
+The standard errors of each of the estimates that appear in the
+lottery functions are very high. This occurs because of the
+extremely over-identified model and the dense Jacobian used to
+calculate the standard errors. These errors do not reduce upon further
+iterations of the weighting matrix. Since each term in the behavioral
+model enters the valuation function in an extremely non-linear manner,
+the Jacobian is poorly approximated by a quadratic function, and thus
+standard errors constructed will be extremely high. 
+
+The estimate of the model using a CRRA utility function produces a
+curious result. I find a strong level of risk aversion. There
+is such a large standard error tough that the possibility of risk
+neutrality or risk-loving nature cannot be ruled out. This basic
+utility function which is quite parsimonious allows for just as
+strong of a fit both in sample as out-of-sample as the model based on
+cumulative prospect theory.
+
+None of the behavioral models suggest that probability weighting is
+being exhibited. In all formulations of the model, individuals simply
+slightly differently weigh losses and the convexity of gains. This
+suggests that the result that individuals do not use probability
+weighting is quite robust to model miss-specification. I note that I
+do place constraints on $\gamma,\delta$ such that they are bounded between $0$
+and $1$, and limit $\delta$ to a slightly higher value than $0$ purely for
+numerical reasons. This ensures that we would not see under-weighting
+of the probability weighting functions, and thus I only allow for
+over-weighting.
+
+The concavity of the valuation function combining with the lack of
+probability weighting shows that risk-aversion is what is suggested by
+the cumulative prospect theory models as well. In fact, these
+specifications all report a negative valuation under cumulative
+prospect theory. In this framework, individuals are aware that
+they face a losing bet, but they obtain some fixed level of utility
+for participating in the lottery. This ``fixed effect'' drives
+purchases, and can only be interpreted as utility from the act of
+gambling, completely independent of the potential rewards.
+
+While market equilibrium between the different cases was employed in
+the estimation of the model, the equilibrium between the prices of the
+contents of the cases and the prices of the cases was never used. This
+creates an interesting outside-moment condition where I can examine
+how each model fits this equilibrium condition. I consider the
+equilibrium condition as indifference between the valuation of the
+lottery and the price of the lottery. This is all encompassed in the
+valuation function for the cumulative prospect theory models, but are
+two separate terms in the rational model. In both I take the average
+over each data point and consider which is closer to zero. I consider
+both the case of market transactions only, and market transactions and
+buy orders for the behavioral model, and report the average over all
+data points for the rational. 
+
+\begin{minipage}{\linewidth}
+  \centering
+  \captionof{table}{Lottery Valuations}
+  \begin{tabular}{@{}lcccccc@{}}\toprule
+    & \multicolumn{2}{c}{Characteristics} & &\multicolumn{3}{c}{Lottery Valuations}\\
+    \cmidrule{2-3} \cmidrule{5-7}
+  Case & $\mathbb{E}[V]$ & Price &\quad& CPT Valuation & Market Only & Rational\\\midrule
+Operation Breakout & 0.77011 & 2.5305 &\quad& -0.40693 & -0.40693 & -0.0052805\\
+Operation Wildfire & 0.89891 & 2.5307 &\quad& -0.32827 & -0.32827 & -0.0049704\\
+Huntsman Weapon Case & 0.95531 & 3.3181 &\quad& -0.49249 & -0.53162 & -0.15657\\
+Shadow Case & 0.85299 & 2.5349 &\quad& -0.35231 & -0.3512 & -0.0059236\\
+Falchion Case & 0.95072 & 2.5323 &\quad& -0.36465 & -0.36465 & -0.0063908\\
+Chroma Case & 0.83215 & 2.55 &\quad& -0.34827 & -0.34559 & -0.0095399\\
+Chroma 2 Case & 1.0058 & 2.53 &\quad& -0.33199 & -0.33199 & -0.0048381\\
+Spectrum Case & 0.98146 & 2.53 &\quad& -0.24042 & -0.24042 & -0.005158\\
+Chroma 3 Case & 0.66099 & 2.53 &\quad& -0.38344 & -0.38344 & -0.0053253\\
+Operation Hydra & 1.5465 & 4.0827 &\quad& -0.18677 & -0.31092 & -0.24581\\
+Glove Case & 0.84301 & 2.53 &\quad& -0.31471 & -0.31471 & -0.0051815\\
+Gamma 2 Case & 0.68335 & 2.53 &\quad& -0.34373 & -0.34373 & -0.0053237\\
+Gamma Case & 0.80717 & 2.53 &\quad& -0.28795 & -0.28795 & -0.0052006\\
+CS:GO Weapon & 4.4611 & 9.3248 &\quad& -0.20035 & -0.63434 & -1.5106\\
+eSports 2013 Case & 3.2708 & 10.354 &\quad& -0.34529 & -1.0796 & -1.2112\\
+eSports 2013 Winter & 1.5687 & 2.6441 &\quad& -0.081838 & -0.058941 & -0.037442\\
+Operation Phoenix & 0.85507 & 2.5416 &\quad& -0.35965 & -0.35737 & -0.0089612\\
+Winter Offensive & 1.299 & 3.5079 &\quad& -0.38325 & -0.43248 & -0.19626\\
+Operation Vanguard & 1.038 & 2.5928 &\quad& -0.35491 & -0.34876 & -0.021628\\
+Operation Bravo & 4.3567 & 12.628 &\quad& -0.74652 & -1.2878 & -2.3076\\
+eSports 2014 Summer & 1.4136 & 2.7414 &\quad& -0.22718 & -0.21321 & -0.059558\\
+Revolver Case & 1.1045 & 2.53 &\quad& -0.27059 & -0.27059 & -0.0046285\\\bottomrule
+  \end{tabular}
+  
+\end{minipage}
+\vspace{.2in}
+
+
+
+The rational model presents a much more compelling story. Although it
+provides risk-aversion, the high sensitivity to price allows for the
+valuations of the lotteries to be closer to zero than the cumulative
+prospect theory estimates. The average over all lotteries is $-0.2647$
+compared to $-0.33416$ for the cumulative prospect theory. However the
+rational model appears to have several outliers that influence the
+mean heavily. If we consider the more robust median we get a median
+valuation estimate of $-0.007676$ for the rational case and $-0.34451$
+for the behavioral model. Appealing to market equilibrium, we find that
+the rational model is actually predicting behavior better than the
+behavioral model. The outliers themselves occur for the lotteries for
+which there is a high price relative to the other lotteries, and the
+poor fit is likely explained by poor price instruments, which are more
+relevant in the CRRA model where price appears linearly. 
+
+Alternatives to explore this range from the models of Belief
+Heterogeneity utilized by Bajari, to adding preference heterogeneity
+and non-parametric fit, as used by others. Another alternative is
+changing how the price of the contents is computed, using averages
+over the past rather than simply the spot price on the day the lottery
+was sold. However many of these options are much more computationally
+intensive, and may require simplifications in other aspects of the
+model to be able to be computed.
+
+\section{Conclusion}
+
+Although there is high uncertainty in our estimates in any
+specification of the model, it is not clear that there is substantial
+information to be gained from application of the behavioral model of
+cumulative prospect theory to market level data. It appears that
+market shares are less determined by the valuations of the lotteries
+under any specification than other characteristics. That is, in this
+market individuals are less price sensitive than they are sensitive to
+the other characteristics present in the market. In fact, when
+examining which model better represents equilibrium between the
+contents and the lottery itself, the rational model predicts better
+than the behavioral model.
+
+This suggests individuals are less price sensitive to their valuations
+when opening lotteries than they are to the price of being able to
+open the lottery, based on the computed price sensitivity from the
+rational case. It is difficult to determine price sensitivity for
+cumulative prospect theory, as the price is embedded in the model in a
+more complex notion, so determining a distribution is computationally
+taxing. 
+
+If a behavioral model is to be adopted, the reference point used
+appears to be quite sensitive to model misspecification. This makes
+utilization of this model in market situations less appealing, as
+unobserved characteristics will always be present in structural
+estimation from market data. This paper is unable to build intuition
+or guidance for the choice of an ideal reference point, as it is
+unclear from the results which reference point from the two examined
+is more informative.
+
+Cumulative Prospect Theory has aided many researchers in the
+laboratory, but its use in the field has been limited due to many
+complexities in the data. This foray into market data suggests that
+its ability to explain deviations is limited compared to simple models
+of choice under uncertainty, and adds significant computational
+complexity that precludes more complicated models of heterogeneity. I
+find that it is not worthwhile when examining lotteries at the market
+level to use cumulative prospect theory, due to the large increases in
+computational power and lack of external validity in outside moment
+conditions. 
 
 
 
@@ -868,6 +1225,10 @@ $\alpha$ & 0.17411 ( 6093.657) & $\beta$ & -0.32488 (0.28937)\\
 
 %\nocite{OptimalBLPInstrument}
 %\nocite{SteamMarket}
+
+\newpage
+
+\section{Bibliography}
 
 \bibliography{biblio}{}
 
